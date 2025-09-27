@@ -94,6 +94,21 @@ export default function CameraCapture() {
     }
   };
 
+  // Download captured image
+  const downloadImage = () => {
+    if (!capturedImage) {
+      alert("Please capture a photo first!");
+      return;
+    }
+
+    const link = document.createElement('a');
+    link.href = capturedImage;
+    link.download = `camera-capture-${new Date().getTime()}.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
@@ -168,6 +183,13 @@ export default function CameraCapture() {
                 alt="Captured" 
                 className="w-full h-64 object-cover rounded-lg border"
               />
+              <Button 
+                onClick={downloadImage}
+                variant="outline"
+                className="w-full mt-2"
+              >
+                📥 Download Image
+              </Button>
             </div>
           )}
 
