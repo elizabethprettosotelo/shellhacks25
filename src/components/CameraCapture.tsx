@@ -22,19 +22,85 @@ export default function CameraCapture({ mode = 'analysis', onCharacterCreated }:
   const [cameraActive, setCameraActive] = useState(false);
   const [characterSuggestion, setCharacterSuggestion] = useState<Partial<Character> | null>(null);
   const [showTroubleshooting, setShowTroubleshooting] = useState(false);
+  const [diagnosticInfo, setDiagnosticInfo] = useState<string>("");
   
   const { saveCharacter, setCurrentCharacter } = useCharacterContext();
+
+  // Check browser capabilities on mount
+  useEffect(() => {
+    const checkCapabilities = async () => {
+      let info = "🔍 Browser Diagnostics:\n\n";
+      
+      // Check secure context
+      info += `🔒 Secure Context: ${window.isSecureContext ? '✅ Yes' : '❌ No (HTTPS required)'}\n`;
+      
+      // Check getUserMedia support
+      info += `📹 getUserMedia: ${(navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') ? '✅ Supported' : '❌ Not supported'}\n`;
+      
+      // Check if we can enumerate devices
+      try {
+        if (navigator.mediaDevices?.enumerateDevices) {
+          const devices = await navigator.mediaDevices.enumerateDevices();
+          const videoDevices = devices.filter(d => d.kind === 'videoinput');
+          info += `🎥 Video Devices: ${videoDevices.length} found\n`;
+        } else {
+          info += `🎥 Device Enumeration: ❌ Not supported\n`;
+        }
+      } catch {
+        info += `🎥 Device Enumeration: ❌ Permission needed\n`;
+      }
+      
+      // Browser info
+      info += `🌐 User Agent: ${navigator.userAgent.split(' ')[0]}\n`;
+      info += `📍 Location: ${window.location.protocol}//${window.location.host}\n`;
+      
+      setDiagnosticInfo(info);
+    };
+    
+    checkCapabilities();
+  }, []);
 
   // Start camera
   const startCamera = async () => {
     try {
+      console.log('🔍 Starting camera diagnostics...');
+      console.log('User Agent:', navigator.userAgent);
+      console.log('Location:', window.location.href);
+      console.log('Secure Context:', window.isSecureContext);
+      
       // Check if getUserMedia is available
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        alert("Camera not supported on this browser. Please use Chrome, Firefox, or Safari.");
+        const message = "Camera not supported on this browser or environment. Please use Chrome, Firefox, or Safari on a regular browser window (not embedded).";
+        console.error('❌', message);
+        alert(message);
         return;
       }
 
-      console.log("Requesting camera permission...");
+      // Check if we're in a secure context
+      if (!window.isSecureContext) {
+        const message = "Camera requires HTTPS or localhost. Please make sure you're accessing the site securely.";
+        console.error('❌', message);
+        alert(message);
+        return;
+      }
+
+      console.log('📹 Requesting camera permission...');
+      
+      // First try to enumerate devices to see if any cameras are available
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter(device => device.kind === 'videoinput');
+        console.log(`Found ${videoDevices.length} video input devices`);
+        
+        if (videoDevices.length === 0) {
+          alert("No camera devices found. Please make sure a camera is connected and not being used by other applications.");
+          return;
+        }
+      } catch (enumError) {
+        console.warn("Could not enumerate devices:", enumError);
+        // Continue anyway as some browsers don't allow enumeration without permission
+      }
+
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: { 
           width: { ideal: 640 }, 
@@ -49,6 +115,9 @@ export default function CameraCapture({ mode = 'analysis', onCharacterCreated }:
         // Wait for video to load
         videoRef.current.onloadedmetadata = () => {
           console.log("Video metadata loaded successfully");
+          videoRef.current?.play().catch(playError => {
+            console.error("Error playing video:", playError);
+          });
         };
       }
       setStream(mediaStream);
@@ -61,7 +130,14 @@ export default function CameraCapture({ mode = 'analysis', onCharacterCreated }:
       const err = error as { name?: string; message?: string }; // Cast for error properties
       
       if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-        errorMessage += "Camera permission denied. Please:\n\n1. Click the camera icon in your browser's address bar\n2. Select 'Allow' for camera access\n3. Refresh the page and try again\n\nOr check your browser settings to allow camera access for this site.";
+        errorMessage += "Camera permission denied. This commonly happens in embedded browsers.\n\n";
+        errorMessage += "SOLUTIONS:\n";
+        errorMessage += "1. If you're in VS Code: Click the external browser icon (↗️) in the top-right corner to open in your regular browser\n";
+        errorMessage += "2. In regular browser: Click the camera icon 🎥 in the address bar and select 'Allow'\n";
+        errorMessage += "3. Make sure no other apps are using your camera\n";
+        errorMessage += "4. Try refreshing the page after allowing permissions\n";
+        errorMessage += "5. Check browser settings: Site Settings → Camera → Allow\n\n";
+        errorMessage += "TIP: VS Code's embedded browser has limited camera support. Use Chrome, Firefox, or Safari directly for best results.";
       } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
         errorMessage += "No camera found. Please:\n\n1. Make sure a camera is connected\n2. Close other apps that might be using the camera\n3. Try refreshing the page";
       } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
@@ -218,7 +294,6 @@ export default function CameraCapture({ mode = 'analysis', onCharacterCreated }:
       // Don't override the name from defaultCharacter
       body: defaultCharacter.body,
       hair: defaultCharacter.hair,
-      bangs: defaultCharacter.bangs,
       eyes: defaultCharacter.eyes,
       mouth: defaultCharacter.mouth,
       clothes: defaultCharacter.clothes,
@@ -258,6 +333,59 @@ export default function CameraCapture({ mode = 'analysis', onCharacterCreated }:
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  // Get diagnostic information
+  const getDiagnostics = async () => {
+    try {
+      let info = "🖥️ Browser & Device Diagnostics:\n\n";
+      
+      // Browser info
+      info += `🌐 User Agent: ${navigator.userAgent}\n`;
+      info += `📍 Protocol: ${window.location.protocol}\n`;
+      info += `🏠 Host: ${window.location.host}\n`;
+      info += `🔒 Secure Context: ${window.isSecureContext ? '✅ Yes' : '❌ No (HTTPS required for camera)'}\n`;
+      
+      // Check if we're in an embedded browser
+      if (navigator.userAgent.includes('VS Code')) {
+        info += `⚠️ Embedded Browser: VS Code Simple Browser detected\n`;
+        info += `💡 Tip: Camera might not work in embedded browsers. Try external browser.\n`;
+      }
+      
+      // Check getUserMedia support
+      info += `📹 getUserMedia: ${(navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') ? '✅ Supported' : '❌ Not supported'}\n`;
+      
+      // Check if we can enumerate devices
+      try {
+        if (navigator.mediaDevices?.enumerateDevices) {
+          const devices = await navigator.mediaDevices.enumerateDevices();
+          const videoDevices = devices.filter(d => d.kind === 'videoinput');
+          info += `🎥 Video Devices: ${videoDevices.length} found\n`;
+          if (videoDevices.length === 0) {
+            info += `❌ No camera devices detected. Make sure camera is connected and not in use.\n`;
+          }
+        } else {
+          info += `🎥 Device Enumeration: ❌ Not supported\n`;
+        }
+      } catch {
+        info += `🎥 Device Enumeration: ❌ Permission needed or blocked\n`;
+      }
+      
+      // Check current camera state
+      info += `📺 Camera Active: ${cameraActive ? '✅ Yes' : '❌ No'}\n`;
+      info += `📸 Image Captured: ${capturedImage ? '✅ Yes' : '❌ No'}\n`;
+      
+      // Add troubleshooting tips
+      info += `\n🔧 Troubleshooting Tips:\n`;
+      info += `• Try opening this page in Chrome/Firefox (not embedded browser)\n`;
+      info += `• Make sure camera isn't used by other apps\n`;
+      info += `• Check browser permissions for camera access\n`;
+      info += `• Ensure you're on HTTPS or localhost\n`;
+      
+      setDiagnosticInfo(info);
+    } catch (error) {
+      setDiagnosticInfo(`Error getting diagnostics: ${error}`);
+    }
   };
 
   // Cleanup on unmount
@@ -335,6 +463,25 @@ export default function CameraCapture({ mode = 'analysis', onCharacterCreated }:
               Capture Photo
             </Button>
           </div>
+
+          {/* Diagnostics button */}
+          <div className="text-center">
+            <Button 
+              onClick={getDiagnostics} 
+              variant="outline"
+              size="sm"
+            >
+              🔍 Check Camera Support
+            </Button>
+          </div>
+
+          {/* Diagnostics display */}
+          {diagnosticInfo && (
+            <div className="bg-gray-100 p-3 rounded-lg text-xs">
+              <h4 className="font-semibold mb-2">Camera Diagnostics:</h4>
+              <pre className="whitespace-pre-wrap text-gray-700">{diagnosticInfo}</pre>
+            </div>
+          )}
 
           {/* Hidden canvas for image capture */}
           <canvas ref={canvasRef} style={{ display: 'none' }} />

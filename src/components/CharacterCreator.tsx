@@ -66,49 +66,85 @@ export default function CharacterCreator({ onCharacterComplete, initialCharacter
 
   // Character preview component
   const CharacterPreview = () => (
-    <div className="relative w-48 h-64 mx-auto border-2 border-gray-300 rounded-lg bg-gray-50 overflow-hidden">
+    <div className="relative w-96 h-[28rem] -ml-8 border-2 border-gray-300 rounded-lg bg-gray-50 overflow-hidden">
+      {/* Layer the character parts - Hair behind, bangs in front */}
+      
+      {/* Hair (behind everything) */}
       <div className="absolute inset-0 flex items-center justify-center">
-        {/* This would layer the character parts */}
-        <div className="relative w-full h-full">
-          {/* Body */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-32 h-40 bg-blue-200 rounded-full flex items-end justify-center text-xs text-gray-600">
-              {getPartById('body', character.body)?.name}
-            </div>
-          </div>
-          
-          {/* Clothes */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-            <div className="w-24 h-16 bg-green-200 rounded text-xs text-center pt-1">
-              {getPartById('clothes', character.clothes)?.name}
-            </div>
-          </div>
-          
-          {/* Hair */}
-          <div className="absolute top-4 left-1/2 transform -translate-x-1/2">
-            <div className="w-20 h-12 bg-yellow-600 rounded-full text-xs text-center pt-1 text-white">
-              {getPartById('hair', character.hair)?.name}
-            </div>
-          </div>
-          
-          {/* Eyes */}
-          <div className="absolute top-12 left-1/2 transform -translate-x-1/2">
-            <div className="w-16 h-8 bg-blue-400 rounded-full text-xs text-center pt-1 text-white">
-              {getPartById('eyes', character.eyes)?.name}
-            </div>
-          </div>
-          
-          {/* Mouth */}
-          <div className="absolute top-20 left-1/2 transform -translate-x-1/2">
-            <div className="w-12 h-4 bg-red-300 rounded-full text-xs text-center">
-              {getPartById('mouth', character.mouth)?.name.split(' ')[0]}
-            </div>
-          </div>
+        <div className="relative" style={{ transform: 'translate(80px, 40px)' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={getPartById('hair', character.hair)?.imageUrl}
+            alt="Hair"
+            className="w-full h-full object-contain scale-110"
+          />
         </div>
       </div>
       
-      {/* Character name */}
-      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-white px-2 py-1 rounded text-sm font-semibold">
+      {/* Body (base layer) */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative" style={{ transform: 'translate(80px, 40px)' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={getPartById('body', character.body)?.imageUrl}
+            alt="Body"
+            className="w-full h-full object-contain scale-110"
+          />
+        </div>
+      </div>
+      
+      {/* Clothes (on top of body) */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative" style={{ transform: 'translate(80px, 40px)' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={getPartById('clothes', character.clothes)?.imageUrl}
+            alt="Clothes"
+            className="w-full h-full object-contain scale-110"
+          />
+        </div>
+      </div>
+      
+      {/* Eyes */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative" style={{ transform: 'translate(80px, 40px)' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={getPartById('eyes', character.eyes)?.imageUrl}
+            alt="Eyes"
+            className="w-full h-full object-contain scale-110"
+          />
+        </div>
+      </div>
+      
+      {/* Mouth */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative" style={{ transform: 'translate(80px, 40px)' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={getPartById('mouth', character.mouth)?.imageUrl}
+            alt="Mouth"
+            className="w-full h-full object-contain scale-110"
+          />
+        </div>
+      </div>
+      
+      {/* Bangs (in front of everything) */}
+      {character.bangs && character.bangs !== 'bangs-none' && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="relative" style={{ transform: 'translate(80px, 40px)' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={getPartById('bangs', character.bangs)?.imageUrl}
+              alt="Bangs"
+              className="w-full h-full object-contain scale-110"
+            />
+          </div>
+        </div>
+      )}
+      
+      {/* Character name overlay */}
+      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-70 text-white px-3 py-1 rounded text-sm font-semibold">
         {character.name}
       </div>
     </div>
@@ -129,8 +165,13 @@ export default function CharacterCreator({ onCharacterComplete, initialCharacter
                 : 'border-gray-200 hover:border-gray-300'
             }`}
           >
-            <div className="w-16 h-16 bg-gray-100 rounded mx-auto mb-2 flex items-center justify-center text-xs">
-              🎨
+            <div className="w-16 h-16 bg-gray-100 rounded mx-auto mb-2 overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={part.imageUrl}
+                alt={part.name}
+                className="w-full h-full object-contain"
+              />
             </div>
             <p className="text-sm font-medium">{part.name}</p>
           </button>

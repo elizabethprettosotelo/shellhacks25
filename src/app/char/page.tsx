@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSimpleNavigation } from "@/hooks/useSimpleNavigation";
 import { useCharacterContext } from "@/contexts/CharacterContext";
 import CharacterCreator from "../../components/CharacterCreator";
+import CharacterDisplay from "../../components/CharacterDisplay";
 import { Button } from "@/components/ui/button";
 import { Character } from "@/lib/characterData";
 
@@ -52,29 +53,21 @@ export default function CharacterPage() {
 
         {/* Current Character Display */}
         {currentCharacter && (
-          <div className="bg-white rounded-lg p-6 shadow-lg border-2 border-green-200 mb-8">
-            <h2 className="text-xl font-semibold text-green-800 mb-2">Your Current Character</h2>
-            <div className="flex items-center justify-center space-x-4">
-              <div className="w-16 h-20 bg-blue-200 rounded-lg flex items-center justify-center">
-                🧑‍🎨
-              </div>
-              <div className="text-left">
-                <h3 className="text-lg font-bold">{currentCharacter.name}</h3>
-                <p className="text-sm text-gray-600">
-                  {currentCharacter.personality?.slice(0, 3).join(', ')}
-                </p>
-                <p className="text-xs text-gray-500">
-                  Created {currentCharacter.createdAt.toLocaleDateString()}
-                </p>
-              </div>
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold text-green-800 mb-4 text-center">Your Current Character</h2>
+            <CharacterDisplay 
+              character={currentCharacter} 
+              size="medium" 
+              showDetails={true}
+            />
+            <div className="text-center mt-4">
+              <Button 
+                variant="outline" 
+                onClick={() => setMode('create-manual')}
+              >
+                Edit Character
+              </Button>
             </div>
-            <Button 
-              variant="outline" 
-              onClick={() => setMode('create-manual')}
-              className="mt-4"
-            >
-              Edit Character
-            </Button>
           </div>
         )}
 

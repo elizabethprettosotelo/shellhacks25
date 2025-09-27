@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Camera Debug Test</title>
+</head>
+<body>
+    <h1>Camera Debug Test</h1>
+    <video id="video" width="640" height="480" autoplay></video>
+    <br>
+    <button onclick="startCamera()">Start Camera</button>
+    <button onclick="stopCamera()">Stop Camera</button>
+    <div id="output"></div>
+
+    <script>
+        let stream = null;
+        const video = document.getElementById('video');
+        const output = document.getElementById('output');
+
+        function log(message) {
+            output.innerHTML += '<p>' + message + '</p>';
+            console.log(message);
+        }
+
+        async function startCamera() {
+            try {
+                log('Checking browser support...');
+                
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    log('❌ getUserMedia not supported');
+                    return;
+                }
+                
+                log('✅ getUserMedia supported');
+                log('Secure context: ' + window.isSecureContext);
+                log('Location: ' + window.location.href);
+                
+                // Check devices
+                try {
+                    const devices = await navigator.mediaDevices.enumerateDevices();
+                    const videoDevices = devices.filter(d => d.kind === 'videoinput');
+                    log('Video devices found: ' + videoDevices.length);
+                } catch (e) {
+                    log('Could not enumerate devices: ' + e.message);
+                }
+                
+                log('Requesting camera access...');
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { width: 640, height: 480 }
+                });
+                
+                video.srcObject = stream;
+                log('✅ Camera started successfully!');
+                
+            } catch (error) {
+                log('❌ Error: ' + error.name + ' - ' + error.message);
+            }
+        }
+
+        function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+                video.srcObject = null;
+                log('Camera stopped');
+            }
+        }
+    </script>
+</body>
+</html>

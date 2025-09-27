@@ -13,7 +13,7 @@ export interface Character {
   name: string;
   body: string;
   hair: string;
-  bangs?: string;
+  bangs?: string; // Optional bangs that render in front
   eyes: string;
   mouth: string;
   clothes: string;
@@ -23,42 +23,68 @@ export interface Character {
   createdFrom?: 'manual' | 'ai-photo';
 }
 
-// Sample character parts data - in real app, these would come from your Google Drive assets
+// Character parts data using real assets from public/charassets
 export const characterParts: Record<CharacterCategory, CharacterPart[]> = {
   body: [
-    { id: 'body-1', name: 'Light Skin', imageUrl: '/assets/body/light-skin.png', category: 'body' },
-    { id: 'body-2', name: 'Medium Skin', imageUrl: '/assets/body/medium-skin.png', category: 'body' },
-    { id: 'body-3', name: 'Dark Skin', imageUrl: '/assets/body/dark-skin.png', category: 'body' },
+    { id: 'body-1', name: 'Body 1', imageUrl: '/charassets/body/Body 1.PNG', category: 'body' },
+    { id: 'body-2', name: 'Body 2', imageUrl: '/charassets/body/Body 2.PNG', category: 'body' },
+    { id: 'body-3', name: 'Body 3', imageUrl: '/charassets/body/Body 3.PNG', category: 'body' },
+    { id: 'body-4', name: 'Body 4', imageUrl: '/charassets/body/Body 4.PNG', category: 'body' },
+    { id: 'body-5', name: 'Body 5', imageUrl: '/charassets/body/Body 5.PNG', category: 'body' },
+    { id: 'body-6', name: 'Body 6', imageUrl: '/charassets/body/Body 6.PNG', category: 'body' },
+    { id: 'body-7', name: 'Body 7', imageUrl: '/charassets/body/Body 7.PNG', category: 'body' },
+    { id: 'body-8', name: 'Body 8', imageUrl: '/charassets/body/Body 8.PNG', category: 'body' },
+    { id: 'body-9', name: 'Body 9', imageUrl: '/charassets/body/Body 9.PNG', category: 'body' },
   ],
   hair: [
-    { id: 'hair-1', name: 'Short Brown', imageUrl: '/assets/hair/short-brown.png', category: 'hair' },
-    { id: 'hair-2', name: 'Long Blonde', imageUrl: '/assets/hair/long-blonde.png', category: 'hair' },
-    { id: 'hair-3', name: 'Curly Black', imageUrl: '/assets/hair/curly-black.png', category: 'hair' },
-    { id: 'hair-4', name: 'Red Waves', imageUrl: '/assets/hair/red-waves.png', category: 'hair' },
+    { id: 'hair-1', name: 'Hair 1', imageUrl: '/charassets/hair/Hair 1.PNG', category: 'hair' },
+    { id: 'hair-2', name: 'Hair 2', imageUrl: '/charassets/hair/Hair 2.PNG', category: 'hair' },
+    { id: 'hair-3', name: 'Hair 3', imageUrl: '/charassets/hair/Hair 3.PNG', category: 'hair' },
+    { id: 'hair-4', name: 'Hair 4', imageUrl: '/charassets/hair/Hair 4.PNG', category: 'hair' },
+    { id: 'hair-5', name: 'Hair 5', imageUrl: '/charassets/hair/Hair 5.PNG', category: 'hair' },
+    { id: 'hair-6', name: 'Hair 6', imageUrl: '/charassets/hair/Hair 6.PNG', category: 'hair' },
+    { id: 'hair-7', name: 'Hair 7', imageUrl: '/charassets/hair/Hair 7.PNG', category: 'hair' },
   ],
   bangs: [
-    { id: 'bangs-1', name: 'Side Swept', imageUrl: '/assets/bangs/side-swept.png', category: 'bangs' },
-    { id: 'bangs-2', name: 'Straight', imageUrl: '/assets/bangs/straight.png', category: 'bangs' },
-    { id: 'bangs-3', name: 'Wispy', imageUrl: '/assets/bangs/wispy.png', category: 'bangs' },
-    { id: 'bangs-none', name: 'No Bangs', imageUrl: '/assets/bangs/none.png', category: 'bangs' },
+    { id: 'bangs-none', name: 'No Bangs', imageUrl: '', category: 'bangs' },
+    { id: 'bangs-1', name: 'Bangs 1', imageUrl: '/charassets/bangs/Bangs 1.PNG', category: 'bangs' },
+    { id: 'bangs-2', name: 'Bangs 2', imageUrl: '/charassets/bangs/Bangs 2.PNG', category: 'bangs' },
+    { id: 'bangs-3', name: 'Bangs 3', imageUrl: '/charassets/bangs/Bangs 3.PNG', category: 'bangs' },
+    { id: 'bangs-4', name: 'Bangs 4', imageUrl: '/charassets/bangs/Bangs 4.PNG', category: 'bangs' },
+    { id: 'bangs-5', name: 'Bangs 5', imageUrl: '/charassets/bangs/Bangs 5.PNG', category: 'bangs' },
+    { id: 'bangs-6', name: 'Bangs 6', imageUrl: '/charassets/bangs/Bangs 6.PNG', category: 'bangs' },
+    { id: 'bangs-7', name: 'Bangs 7', imageUrl: '/charassets/bangs/Bangs 7.PNG', category: 'bangs' },
   ],
   eyes: [
-    { id: 'eyes-1', name: 'Brown Eyes', imageUrl: '/assets/eyes/brown.png', category: 'eyes' },
-    { id: 'eyes-2', name: 'Blue Eyes', imageUrl: '/assets/eyes/blue.png', category: 'eyes' },
-    { id: 'eyes-3', name: 'Green Eyes', imageUrl: '/assets/eyes/green.png', category: 'eyes' },
-    { id: 'eyes-4', name: 'Hazel Eyes', imageUrl: '/assets/eyes/hazel.png', category: 'eyes' },
+    { id: 'eyes-1', name: 'Eyes 1', imageUrl: '/charassets/eyes/Eyes 1.PNG', category: 'eyes' },
+    { id: 'eyes-2', name: 'Eyes 2', imageUrl: '/charassets/eyes/Eyes 2.PNG', category: 'eyes' },
+    { id: 'eyes-3', name: 'Eyes 3', imageUrl: '/charassets/eyes/Eyes 3.PNG', category: 'eyes' },
+    { id: 'eyes-4', name: 'Eyes 4', imageUrl: '/charassets/eyes/Eyes 4.PNG', category: 'eyes' },
+    { id: 'eyes-5', name: 'Eyes 5', imageUrl: '/charassets/eyes/Eyes 5.PNG', category: 'eyes' },
   ],
   mouth: [
-    { id: 'mouth-1', name: 'Smile', imageUrl: '/assets/mouth/smile.png', category: 'mouth' },
-    { id: 'mouth-2', name: 'Neutral', imageUrl: '/assets/mouth/neutral.png', category: 'mouth' },
-    { id: 'mouth-3', name: 'Smirk', imageUrl: '/assets/mouth/smirk.png', category: 'mouth' },
-    { id: 'mouth-4', name: 'Surprised', imageUrl: '/assets/mouth/surprised.png', category: 'mouth' },
+    { id: 'mouth-1', name: 'Mouth 1', imageUrl: '/charassets/mouth/Mouth 1.PNG', category: 'mouth' },
+    { id: 'mouth-2', name: 'Mouth 2', imageUrl: '/charassets/mouth/Mouth 2.PNG', category: 'mouth' },
+    { id: 'mouth-3', name: 'Mouth 3', imageUrl: '/charassets/mouth/Mouth 3 .PNG', category: 'mouth' },
+    { id: 'mouth-4', name: 'Mouth 4', imageUrl: '/charassets/mouth/Mouth 4.PNG', category: 'mouth' },
+    { id: 'mouth-5', name: 'Mouth 5', imageUrl: '/charassets/mouth/Mouth 5.PNG', category: 'mouth' },
+    { id: 'mouth-6', name: 'Mouth 6', imageUrl: '/charassets/mouth/Mouth 6.PNG', category: 'mouth' },
+    { id: 'mouth-7', name: 'Mouth 7', imageUrl: '/charassets/mouth/Mouth 7.PNG', category: 'mouth' },
+    { id: 'mouth-8', name: 'Mouth 8', imageUrl: '/charassets/mouth/Mouth 8.PNG', category: 'mouth' },
+    { id: 'mouth-9', name: 'Mouth 9', imageUrl: '/charassets/mouth/Mouth 9.PNG', category: 'mouth' },
+    { id: 'mouth-10', name: 'Mouth 10', imageUrl: '/charassets/mouth/Mouth 10.PNG', category: 'mouth' },
+    { id: 'mouth-11', name: 'Mouth 11', imageUrl: '/charassets/mouth/Mouth 11.PNG', category: 'mouth' },
+    { id: 'mouth-12', name: 'Mouth 12', imageUrl: '/charassets/mouth/Mouth 12.PNG', category: 'mouth' },
+    { id: 'mouth-13', name: 'Mouth 13', imageUrl: '/charassets/mouth/Mouth 13.PNG', category: 'mouth' },
+    { id: 'mouth-14', name: 'Mouth 14', imageUrl: '/charassets/mouth/Mouth 14.PNG', category: 'mouth' },
   ],
   clothes: [
-    { id: 'clothes-1', name: 'Casual T-Shirt', imageUrl: '/assets/clothes/tshirt.png', category: 'clothes' },
-    { id: 'clothes-2', name: 'Button-Up', imageUrl: '/assets/clothes/button-up.png', category: 'clothes' },
-    { id: 'clothes-3', name: 'Hoodie', imageUrl: '/assets/clothes/hoodie.png', category: 'clothes' },
-    { id: 'clothes-4', name: 'Dress', imageUrl: '/assets/clothes/dress.png', category: 'clothes' },
+    { id: 'clothes-1', name: 'Clothes 1', imageUrl: '/charassets/clothes/Clothes 1.PNG', category: 'clothes' },
+    { id: 'clothes-2', name: 'Clothes 2', imageUrl: '/charassets/clothes/Clothes 2.PNG', category: 'clothes' },
+    { id: 'clothes-3', name: 'Clothes 3', imageUrl: '/charassets/clothes/Clothes 3.PNG', category: 'clothes' },
+    { id: 'clothes-4', name: 'Clothes 4', imageUrl: '/charassets/clothes/Clothes 4.PNG', category: 'clothes' },
+    { id: 'clothes-5', name: 'Clothes 5', imageUrl: '/charassets/clothes/Clothes 5.PNG', category: 'clothes' },
+    { id: 'clothes-6', name: 'Clothes 6', imageUrl: '/charassets/clothes/Clothes 6.PNG', category: 'clothes' },
   ],
 };
 
