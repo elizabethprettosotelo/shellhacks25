@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fredoka } from "next/font/google";
+// @ts-ignore
 import "./globals.css";
 
 // Import Fredoka from Google Fonts
