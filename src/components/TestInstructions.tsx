@@ -23,7 +23,7 @@ export default function TestInstructions() {
               </li>
               <li className="flex items-start">
                 <span className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-3 mt-0.5">2</span>
-                <span>Click <strong>"Start Camera"</strong> button</span>
+                <span>Click <strong>&ldquo;Start Camera&rdquo;</strong> button</span>
               </li>
               <li className="flex items-start">
                 <span className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-3 mt-0.5">3</span>
@@ -35,7 +35,7 @@ export default function TestInstructions() {
               </li>
               <li className="flex items-start">
                 <span className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-3 mt-0.5">5</span>
-                <span>Click <strong>"Capture Photo"</strong> to take picture</span>
+                <span>Click <strong>&ldquo;Capture Photo&rdquo;</strong> to take picture</span>
               </li>
               <li className="flex items-start">
                 <span className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-3 mt-0.5">6</span>
@@ -60,7 +60,7 @@ export default function TestInstructions() {
               
               <div className="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-500">
                 <h3 className="font-semibold text-yellow-800">📥 Download Available</h3>
-                <p className="text-sm">Click "Download Image" to save to your Downloads folder</p>
+                <p className="text-sm">Click &ldquo;Download Image&rdquo; to save to your Downloads folder</p>
               </div>
               
               <div className="bg-red-50 p-4 rounded-lg border-l-4 border-red-500">
