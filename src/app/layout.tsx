@@ -21,6 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${fredoka.variable} antialiased`}>
+        <div className="fixed top-4 right-4 bg-black/70 text-white px-4 py-2 rounded-lg text-sm z-50">
+          <div className="text-xs opacity-75">
+            Use ← → arrow keys to navigate pages
+          </div>
+        </div>
         {children}
       </body>
     </html>
