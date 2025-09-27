@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Fredoka } from "next/font/google";
-// @ts-ignore
+// @ts-expect-error: Importing global CSS in a Next.js app directory is not typed
 import "./globals.css";
 
 // Import Fredoka from Google Fonts
