@@ -1,0 +1,121 @@
+{
+  "meta": { "version": 1, "title": "Adventure: Jake From StateFarm vs The Aliens" },
+  "start": "home_intrusion",
+  "scenes": [
+    {
+      "id": "home_intrusion",
+      "setting": "suburban_living_room",
+      "text": "You’re alone at your parents’ house. Homework’s done; research paper can wait. A warmonger alien kicks in the door and declares your home his base of operations. What do you do?",
+      "choices": [
+        { "id": "fight_alien", "label": "Fight the alien", "target": "hospital_smash_cut" },
+        { "id": "call_police_escape", "label": "Call police and escape", "target": "hurricane_drive" }
+      ]
+    },
+
+    {
+      "id": "hospital_smash_cut",
+      "setting": "bug_hospital",
+      "text": "Smash cut: the hospital. Nearly every bone feels broken. A hooded man wheels your bed and murmurs, “This one is protected by StateFarm.” Staff recoil.",
+      "choices": [
+        { "id": "trust_hood", "label": "Trust the hooded man", "target": "imposters_besiege", "effects": { "set": { "trust_jake": true } } },
+        { "id": "stay_put", "label": "Stay in the room", "target": "wasp_billing" }
+      ]
+    },
+
+    {
+      "id": "imposters_besiege",
+      "setting": "city_streets",
+      "text": "Hundreds of you flood the streets—imposters trying to replace you. The hooded man asks you to trust his protection.",
+      "choices": [
+        { "id": "trust_jake_reveal", "label": "Trust him", "target": "jake_revealed", "requires": { "trust_jake": true } },
+        { "id": "run_from_imposters", "label": "Run for it", "target": "alley_ambush" }
+      ]
+    },
+    {
+      "id": "jake_revealed",
+      "setting": "city_streets",
+      "text": "He throws back the hood—JAKE FROM STATEFARM. With a single gust, he scatters the entire imposter horde. You’re safe—for now.",
+      "terminal": true
+    },
+    {
+      "id": "alley_ambush",
+      "setting": "city_alley",
+      "text": "You bolt into an alley. Five imposters corner you. It doesn’t end well.",
+      "terminal": true
+    },
+
+    {
+      "id": "wasp_billing",
+      "setting": "bug_hospital",
+      "text": "A giant, very professional wasp wheels in and itemizes your bill—payable in money or blood. The hooded man offers help.",
+      "choices": [
+        { "id": "blood_payment", "label": "Pay in blood yourself", "target": "blood_husk" },
+        { "id": "let_hood_help", "label": "Accept his help", "target": "jake_tosses_wasp" }
+      ]
+    },
+    {
+      "id": "blood_husk",
+      "setting": "bug_hospital",
+      "text": "You offer an arm. Three seconds later you’re a crisp, decorative husk.",
+      "terminal": true
+    },
+    {
+      "id": "jake_tosses_wasp",
+      "setting": "bug_hospital",
+      "text": "The hood flies off again—JAKE FROM STATEFARM. He grabs the wasp and politely ejects her through a door. You and Jake fight the remaining bugs side-by-side.",
+      "terminal": true
+    },
+
+    {
+      "id": "hurricane_drive",
+      "setting": "suburban_street",
+      "text": "Your call sparks a CAT-5 brawl that levels the block. You speed away, unsure who to call. An alien sniper blows a tire.",
+      "choices": [
+        { "id": "call_wrong_jake", "label": "Call a random number", "target": "wrong_jake_hell" },
+        { "id": "call_emergency", "label": "Call the emergency number Mom gave you", "target": "correct_jake_lands" }
+      ]
+    },
+    {
+      "id": "wrong_jake_hell",
+      "setting": "ravine_edge",
+      "text": "Jake Gyllenhaal picks up. The car sails off a cliff… straight into the underworld.",
+      "choices": [
+        { "id": "accept_rescue", "label": "Accept Jake’s rescue", "target": "ascend_with_jake", "effects": { "set": { "trust_jake": true } } },
+        { "id": "reject_rescue", "label": "Reject him, embrace the underworld", "target": "choose_hell" }
+      ]
+    },
+    {
+      "id": "ascend_with_jake",
+      "setting": "hell_gate",
+      "text": "Because Mom signed you up for life insurance, JAKE FROM STATEFARM appears, spreads wings, and lifts you back to life.",
+      "terminal": true
+    },
+    {
+      "id": "choose_hell",
+      "setting": "hell_gate",
+      "text": "You refuse the offered hand. The demons appreciate your commitment.",
+      "terminal": true
+    },
+    {
+      "id": "correct_jake_lands",
+      "setting": "cliff_road",
+      "text": "The right Jake falls from the sky and stops your car with one hand. He asks you to stay behind him while he deals with the aliens.",
+      "choices": [
+        { "id": "drive_anyway", "label": "Try to drive away", "target": "beam_up_probe" },
+        { "id": "stay_put_trust", "label": "Stay put and trust Jake", "target": "one_punch_mothership", "effects": { "set": { "trust_jake": true } } }
+      ]
+    },
+    {
+      "id": "beam_up_probe",
+      "setting": "mothership",
+      "text": "A tractor beam lifts the car. You learn new meanings of “out-of-network.”",
+      "terminal": true
+    },
+    {
+      "id": "one_punch_mothership",
+      "setting": "skyline",
+      "text": "With a single punch, Jake deletes the city-wide mothership. The invasion ends. Your home reappears good as new.",
+      "terminal": true
+    }
+  ]
+}
