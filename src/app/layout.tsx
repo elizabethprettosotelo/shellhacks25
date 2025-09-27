@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fredoka } from "next/font/google";
+import { CharacterProvider } from "@/contexts/CharacterContext";
 // @ts-expect-error: Importing global CSS in a Next.js app directory is not typed
 import "./globals.css";
 
@@ -22,12 +23,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${fredoka.variable} antialiased`}>
-        <div className="fixed top-4 right-4 bg-black/70 text-white px-4 py-2 rounded-lg text-sm z-50">
-          <div className="text-xs opacity-75">
-            Use ← → arrow keys to navigate pages
+        <CharacterProvider>
+          <div className="fixed top-4 right-4 bg-black/70 text-white px-4 py-2 rounded-lg text-sm z-50">
+            <div className="text-xs opacity-75">
+              Use ← → arrow keys to navigate pages
+            </div>
           </div>
-        </div>
-        {children}
+          {children}
+        </CharacterProvider>
       </body>
     </html>
   );
