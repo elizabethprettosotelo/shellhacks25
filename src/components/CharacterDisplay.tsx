@@ -111,7 +111,7 @@ export default function CharacterDisplay({
               {character.name}
             </h3>
             <p className={`text-gray-600 ${textSizes[size]}`}>
-              Created on {character.createdAt.toLocaleDateString()}
+              Created on {new Date(character.createdAt).toLocaleDateString()}
             </p>
           </div>
 

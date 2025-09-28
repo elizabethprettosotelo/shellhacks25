@@ -19,7 +19,7 @@ export interface Character {
   clothes: string;
   personality?: string[];
   backstory?: string;
-  createdAt: Date;
+  createdAt: Date | string; // Can be Date object or ISO string
   createdFrom?: 'manual' | 'ai-photo';
 }
 
