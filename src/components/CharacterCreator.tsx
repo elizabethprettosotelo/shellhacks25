@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Character,
@@ -48,60 +47,60 @@ export default function CharacterCreator({ onCharacterComplete, initialCharacter
       
       {/* Hair (back layer - behind everything) */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative w-48 h-48" style={{ transform: 'translate(0px, -10px)' }}>
+        <div className="relative">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={getPartById('hair', character.hair)?.imageUrl}
             alt="Hair"
-            className="w-full h-full object-contain"
+            className="object-contain"
           />
         </div>
       </div>
       
       {/* Body (base layer - should be visible behind most things) */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative w-56 h-56" style={{ transform: 'translate(0px, -10px)' }}>
+        <div className="relative">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={getPartById('body', character.body)?.imageUrl}
             alt="Body"
-            className="w-full h-full object-contain"
+            className="object-contain"
           />
         </div>
       </div>
       
       {/* Clothes (covers body but NOT head/face) */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative w-34 h-34" style={{ transform: 'translate(0px, -10px) scale(0.7)' }}>
+        <div className="relative">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={getPartById('clothes', character.clothes)?.imageUrl}
             alt="Clothes"
-            className="w-full h-full object-contain"
+            className="object-contain"
           />
         </div>
       </div>
       
       {/* Eyes (on face - should be visible over clothes) */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative w-48 h-48" style={{ transform: 'translate(0px, -10px)' }}>
+        <div className="relative">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={getPartById('eyes', character.eyes)?.imageUrl}
             alt="Eyes"
-            className="w-full h-full object-contain"
+            className="object-contain"
           />
         </div>
       </div>
       
       {/* Mouth (on face - should be visible over clothes) */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative w-48 h-48" style={{ transform: 'translate(0px, -10px)' }}>
+        <div className="relative">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={getPartById('mouth', character.mouth)?.imageUrl}
             alt="Mouth"
-            className="w-full h-full object-contain"
+            className="object-contain"
           />
         </div>
       </div>
@@ -109,12 +108,12 @@ export default function CharacterCreator({ onCharacterComplete, initialCharacter
       {/* Blush (on face - should be visible over clothes) */}
       {character.blush && character.blush !== 'blush-none' && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative w-48 h-48" style={{ transform: 'translate(0px, -10px)' }}>
+          <div className="relative">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={getPartById('blush', character.blush)?.imageUrl}
               alt="Blush"
-              className="w-full h-full object-contain"
+              className="object-contain"
             />
           </div>
         </div>
@@ -123,12 +122,12 @@ export default function CharacterCreator({ onCharacterComplete, initialCharacter
       {/* Facial Accessories (covers face but should appear over clothes) */}
       {character.facialAccessory && character.facialAccessory !== 'facialAccessory-none' && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative w-48 h-48" style={{ transform: 'translate(0px, -10px)' }}>
+          <div className="relative">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={getPartById('facialAccessory', character.facialAccessory)?.imageUrl}
               alt="Facial Accessory"
-              className="w-full h-full object-contain"
+              className="object-contain"
             />
           </div>
         </div>
@@ -137,12 +136,12 @@ export default function CharacterCreator({ onCharacterComplete, initialCharacter
       {/* Facial Hair (covers lower body/face) */}
       {character.facialHair && character.facialHair !== 'facialHair-none' && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative w-48 h-48" style={{ transform: 'translate(0px, -10px)' }}>
+          <div className="relative">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={getPartById('facialHair', character.facialHair)?.imageUrl}
               alt="Facial Hair"
-              className="w-full h-full object-contain"
+              className="object-contain"
             />
           </div>
         </div>
@@ -151,12 +150,12 @@ export default function CharacterCreator({ onCharacterComplete, initialCharacter
       {/* Bangs (covers body/hair) */}
       {character.bangs && character.bangs !== 'bangs-none' && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative w-48 h-48" style={{ transform: 'translate(0px, -10px)' }}>
+          <div className="relative">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={getPartById('bangs', character.bangs)?.imageUrl}
               alt="Bangs"
-              className="w-full h-full object-contain"
+              className="object-contain"
             />
           </div>
         </div>
@@ -165,12 +164,12 @@ export default function CharacterCreator({ onCharacterComplete, initialCharacter
       {/* Accessories (covers everything) */}
       {character.accessory && character.accessory !== 'accessory-none' && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative w-48 h-48" style={{ transform: 'translate(0px, -10px)' }}>
+          <div className="relative">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={getPartById('accessory', character.accessory)?.imageUrl}
               alt="Accessory"
-              className="w-full h-full object-contain"
+              className="object-contain"
             />
           </div>
         </div>
@@ -195,12 +194,11 @@ export default function CharacterCreator({ onCharacterComplete, initialCharacter
           >
             <div className="w-12 h-12 bg-gray-100 rounded mx-auto mb-2 overflow-hidden">
               {part.imageUrl ? (
-                <Image
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
                   src={part.imageUrl}
                   alt={part.name}
-                  width={48}
-                  height={48}
-                  className="w-full h-full object-contain"
+                  className="object-contain"
                   loading="lazy"
                 />
               ) : (

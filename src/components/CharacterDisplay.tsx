@@ -39,7 +39,7 @@ export default function CharacterDisplay({
               <img
                 src={getPartById('body', character.body)?.imageUrl}
                 alt="Body"
-                className="max-w-full max-h-full object-contain"
+                className="object-contain"
               />
             </div>
             
@@ -49,8 +49,7 @@ export default function CharacterDisplay({
               <img
                 src={getPartById('clothes', character.clothes)?.imageUrl}
                 alt="Clothes"
-                className="max-w-full max-h-full object-contain"
-                style={{ transform: 'scale(0.7)' }}
+                className="object-contain"
               />
             </div>
             
@@ -60,7 +59,7 @@ export default function CharacterDisplay({
               <img
                 src={getPartById('eyes', character.eyes)?.imageUrl}
                 alt="Eyes"
-                className="max-w-full max-h-full object-contain"
+                className="object-contain"
               />
             </div>
             
@@ -70,7 +69,7 @@ export default function CharacterDisplay({
               <img
                 src={getPartById('mouth', character.mouth)?.imageUrl}
                 alt="Mouth"
-                className="max-w-full max-h-full object-contain"
+                className="object-contain"
               />
             </div>
 
@@ -81,7 +80,7 @@ export default function CharacterDisplay({
                 <img
                   src={getPartById('blush', character.blush)?.imageUrl}
                   alt="Blush"
-                  className="max-w-full max-h-full object-contain"
+                  className="object-contain"
                 />
               </div>
             )}
@@ -93,7 +92,7 @@ export default function CharacterDisplay({
                 <img
                   src={getPartById('facialAccessory', character.facialAccessory)?.imageUrl}
                   alt="Facial Accessory"
-                  className="max-w-full max-h-full object-contain"
+                  className="object-contain"
                 />
               </div>
             )}
@@ -105,7 +104,7 @@ export default function CharacterDisplay({
                 <img
                   src={getPartById('facialHair', character.facialHair)?.imageUrl}
                   alt="Facial Hair"
-                  className="max-w-full max-h-full object-contain"
+                  className="object-contain"
                 />
               </div>
             )}
@@ -116,7 +115,7 @@ export default function CharacterDisplay({
               <img
                 src={getPartById('hair', character.hair)?.imageUrl}
                 alt="Hair"
-                className="max-w-full max-h-full object-contain"
+                className="object-contain"
               />
             </div>
             
@@ -127,7 +126,7 @@ export default function CharacterDisplay({
                 <img
                   src={getPartById('bangs', character.bangs)?.imageUrl}
                   alt="Bangs"
-                  className="max-w-full max-h-full object-contain"
+                  className="object-contain"
                 />
               </div>
             )}
@@ -139,7 +138,7 @@ export default function CharacterDisplay({
                 <img
                   src={getPartById('accessory', character.accessory)?.imageUrl}
                   alt="Accessory"
-                  className="max-w-full max-h-full object-contain"
+                  className="object-contain"
                 />
               </div>
             )}
