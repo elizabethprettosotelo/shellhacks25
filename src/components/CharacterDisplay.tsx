@@ -145,11 +145,6 @@ export default function CharacterDisplay({
             )}
           </div>
         </div>
-        
-        {/* Character name overlay */}
-        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-70 text-white px-3 py-1 rounded text-xs font-semibold">
-          {character.name}
-        </div>
       </div>
 
       {/* Character Details */}
@@ -157,7 +152,7 @@ export default function CharacterDisplay({
         <div className="space-y-3">
           <div>
             <h3 className={`font-bold text-gray-800 ${textSizes[size]}`}>
-              {character.name}
+              Character
             </h3>
             <p className={`text-gray-600 ${textSizes[size]}`}>
               Created on {new Date(character.createdAt).toLocaleDateString()}

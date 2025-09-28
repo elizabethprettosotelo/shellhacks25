@@ -18,48 +18,12 @@ export default function CameraCapture({ mode = 'analysis', onCharacterCreated }:
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
-  const [geminiResponse, setGeminiResponse] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
   const [characterSuggestion, setCharacterSuggestion] = useState<Partial<Character> | null>(null);
   const [showTroubleshooting, setShowTroubleshooting] = useState(false);
-  const [diagnosticInfo, setDiagnosticInfo] = useState<string>("");
   
   const { saveCharacter, setCurrentCharacter } = useCharacterContext();
-
-  // Check browser capabilities on mount
-  useEffect(() => {
-    const checkCapabilities = async () => {
-      let info = "🔍 Browser Diagnostics:\n\n";
-      
-      // Check secure context
-      info += `🔒 Secure Context: ${window.isSecureContext ? '✅ Yes' : '❌ No (HTTPS required)'}\n`;
-      
-      // Check getUserMedia support
-      info += `📹 getUserMedia: ${(navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') ? '✅ Supported' : '❌ Not supported'}\n`;
-      
-      // Check if we can enumerate devices
-      try {
-        if (navigator.mediaDevices?.enumerateDevices) {
-          const devices = await navigator.mediaDevices.enumerateDevices();
-          const videoDevices = devices.filter(d => d.kind === 'videoinput');
-          info += `🎥 Video Devices: ${videoDevices.length} found\n`;
-        } else {
-          info += `🎥 Device Enumeration: ❌ Not supported\n`;
-        }
-      } catch {
-        info += `🎥 Device Enumeration: ❌ Permission needed\n`;
-      }
-      
-      // Browser info
-      info += `🌐 User Agent: ${navigator.userAgent.split(' ')[0]}\n`;
-      info += `📍 Location: ${window.location.protocol}//${window.location.host}\n`;
-      
-      setDiagnosticInfo(info);
-    };
-    
-    checkCapabilities();
-  }, []);
 
   // Start camera
   const startCamera = async () => {
@@ -233,7 +197,6 @@ CRITICAL INSTRUCTIONS:
 
 ===START_JSON===
 {
-  "name": "character name",
   "body": "body-X",
   "hair": "hair-X", 
   "bangs": "bangs-X or bangs-none",
@@ -256,8 +219,6 @@ Remember: ONLY return the JSON wrapped in the markers above, nothing else.`;
         'image/jpeg',
         'gemini-2.0-flash-exp'
       );
-      
-      setGeminiResponse(response);
       
       // Parse JSON response with robust extraction
       let characterData: Partial<Character & { reasoning?: string }>;
@@ -307,7 +268,8 @@ Remember: ONLY return the JSON wrapped in the markers above, nothing else.`;
         document.body.removeChild(errorLink);
         URL.revokeObjectURL(errorUrl);
         
-        setGeminiResponse(`ERROR: ${errorMessage}\n\nRaw response:\n${response}`);
+        console.error(`ERROR: ${errorMessage}`);
+        console.error('Raw response:', response);
         return;
       }
       
@@ -353,7 +315,6 @@ Remember: ONLY return the JSON wrapped in the markers above, nothing else.`;
       
     } catch (error) {
       console.error("Error analyzing image:", error);
-      setGeminiResponse("Error analyzing image. Please check your API key and try again.");
     } finally {
       setLoading(false);
     }
@@ -393,19 +354,15 @@ INSTRUCTIONS:
 5. Choose appropriate clothing
 6. Pick the best fitting accessory (if any match)
 7. Select blush, facial accessories, and facial hair if appropriate
-8. Create a character name that fits their appearance
 
 Respond EXACTLY in this format:
 BODY: [body-X]
-HAIR: [hair-X]
-BANGS: [bangs-X or bangs-none]  
+HAIR: [hair-X]  
+BANGS: [bangs-X or bangs-none]
 EYES: [eyes-X]
 MOUTH: [mouth-X]
 CLOTHES: [clothes-X]
-NAME: [character name]
-REASONING: [brief explanation of why you chose these specific assets to match their appearance]`;
-      
-      const response = await generateContentWithImage(
+REASONING: [brief explanation of why you chose these specific assets to match their appearance]`;      const response = await generateContentWithImage(
         characterPrompt,
         base64Data,
         'image/jpeg',
@@ -415,11 +372,9 @@ REASONING: [brief explanation of why you chose these specific assets to match th
       // Parse the response and create character suggestion
       const suggestion = parseCharacterResponse(response);
       setCharacterSuggestion(suggestion);
-      setGeminiResponse(response);
       
     } catch (error) {
       console.error("Error generating character:", error);
-      setGeminiResponse("Error generating character. Please check your API key and try again.");
     } finally {
       setLoading(false);
     }
@@ -428,7 +383,6 @@ REASONING: [brief explanation of why you chose these specific assets to match th
   // Parse Gemini's character response
   const parseCharacterResponse = (response: string): Partial<Character> => {
     const lines = response.split('\n');
-    let name = 'Adventurer';
     let body = defaultCharacter.body;
     let hair = defaultCharacter.hair;
     let bangs = defaultCharacter.bangs;
@@ -437,9 +391,7 @@ REASONING: [brief explanation of why you chose these specific assets to match th
     let clothes = defaultCharacter.clothes;
     
     lines.forEach(line => {
-      if (line.startsWith('NAME:')) {
-        name = line.replace('NAME:', '').trim();
-      } else if (line.startsWith('BODY:')) {
+      if (line.startsWith('BODY:')) {
         const bodyId = line.replace('BODY:', '').trim();
         if (bodyId && bodyId.startsWith('body-')) {
           body = bodyId;
@@ -473,7 +425,6 @@ REASONING: [brief explanation of why you chose these specific assets to match th
     });
 
     return {
-      name,
       body,
       hair,
       bangs,
@@ -517,59 +468,6 @@ REASONING: [brief explanation of why you chose these specific assets to match th
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
-
-  // Get diagnostic information
-  const getDiagnostics = async () => {
-    try {
-      let info = "🖥️ Browser & Device Diagnostics:\n\n";
-      
-      // Browser info
-      info += "🌐 User Agent: " + navigator.userAgent + "\n";
-      info += "📍 Protocol: " + window.location.protocol + "\n";
-      info += "🏠 Host: " + window.location.host + "\n";
-      info += "🔒 Secure Context: " + (window.isSecureContext ? '✅ Yes' : '❌ No (HTTPS required for camera)') + "\n";
-      
-      // Check if we're in an embedded browser
-      if (navigator.userAgent.includes('VS Code')) {
-        info += "⚠️ Embedded Browser: VS Code Simple Browser detected\n";
-        info += "💡 Tip: Camera might not work in embedded browsers. Try external browser.\n";
-      }
-      
-      // Check getUserMedia support
-      info += "📹 getUserMedia: " + ((navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') ? '✅ Supported' : '❌ Not supported') + "\n";
-      
-      // Check if we can enumerate devices
-      try {
-        if (navigator.mediaDevices?.enumerateDevices) {
-          const devices = await navigator.mediaDevices.enumerateDevices();
-          const videoDevices = devices.filter(d => d.kind === 'videoinput');
-          info += "🎥 Video Devices: " + videoDevices.length + " found\n";
-          if (videoDevices.length === 0) {
-            info += "❌ No camera devices detected. Make sure camera is connected and not in use.\n";
-          }
-        } else {
-          info += "🎥 Device Enumeration: ❌ Not supported\n";
-        }
-      } catch {
-        info += "🎥 Device Enumeration: ❌ Permission needed or blocked\n";
-      }
-      
-      // Check current camera state
-      info += "📺 Camera Active: " + (cameraActive ? '✅ Yes' : '❌ No') + "\n";
-      info += "📸 Image Captured: " + (capturedImage ? '✅ Yes' : '❌ No') + "\n";
-      
-      // Add troubleshooting tips
-      info += "\n🔧 Troubleshooting Tips:\n";
-      info += "• Try opening this page in Chrome/Firefox (not embedded browser)\n";
-      info += "• Make sure camera isn't used by other apps\n";
-      info += "• Check browser permissions for camera access\n";
-      info += "• Ensure you're on HTTPS or localhost\n";
-      
-      setDiagnosticInfo(info);
-    } catch (error) {
-      setDiagnosticInfo("Error getting diagnostics: " + error);
-    }
   };
 
   // Cleanup on unmount
@@ -648,25 +546,6 @@ REASONING: [brief explanation of why you chose these specific assets to match th
             </Button>
           </div>
 
-          {/* Diagnostics button */}
-          <div className="text-center">
-            <Button 
-              onClick={getDiagnostics} 
-              variant="outline"
-              size="sm"
-            >
-              🔍 Check Camera Support
-            </Button>
-          </div>
-
-          {/* Diagnostics display */}
-          {diagnosticInfo && (
-            <div className="bg-gray-100 p-3 rounded-lg text-xs">
-              <h4 className="font-semibold mb-2">Camera Diagnostics:</h4>
-              <pre className="whitespace-pre-wrap text-gray-700">{diagnosticInfo}</pre>
-            </div>
-          )}
-
           {/* Hidden canvas for image capture */}
           <canvas ref={canvasRef} style={{ display: 'none' }} />
         </div>
@@ -735,7 +614,7 @@ REASONING: [brief explanation of why you chose these specific assets to match th
                         </div>
                         {/* Character Info */}
                         <div className="flex-1 min-w-0">
-                          <h4 className="font-semibold text-lg">{characterSuggestion.name}</h4>
+                          <h4 className="font-semibold text-lg">Character</h4>
                           <p className="text-sm text-gray-600">Character created from photo analysis</p>
                         </div>
                       </div>
@@ -801,7 +680,7 @@ REASONING: [brief explanation of why you chose these specific assets to match th
                   </div>
                   {/* Character Info */}
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-lg">{characterSuggestion.name}</h4>
+                    <h4 className="font-semibold text-lg">Character</h4>
                     <p className="text-sm text-gray-600 mb-2">Character created from photo analysis</p>
                     <div className="text-xs text-gray-500">
                       <p><strong>Core Assets:</strong> {characterSuggestion.body}, {characterSuggestion.hair}, {characterSuggestion.bangs}, {characterSuggestion.eyes}, {characterSuggestion.mouth}, {characterSuggestion.clothes}</p>
@@ -827,18 +706,6 @@ REASONING: [brief explanation of why you chose these specific assets to match th
                     ✨ Save This Character
                   </Button>
                 </div>
-              </div>
-            </div>
-          )}
-
-          {/* Gemini response */}
-          {geminiResponse && (
-            <div>
-              <h3 className="text-sm font-medium text-gray-700 mb-2">Gemini Analysis:</h3>
-              <div className="p-4 bg-blue-50 rounded-lg border text-sm">
-                <pre className="whitespace-pre-wrap text-gray-700">
-                  {geminiResponse}
-                </pre>
               </div>
             </div>
           )}

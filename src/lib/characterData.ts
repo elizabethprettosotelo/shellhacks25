@@ -10,7 +10,6 @@ export type CharacterCategory = 'body' | 'hair' | 'bangs' | 'eyes' | 'mouth' | '
 
 export interface Character {
   id: string;
-  name: string;
   body: string;
   hair: string;
   bangs?: string; // Optional bangs that render in front
@@ -129,7 +128,6 @@ export const characterParts: Record<CharacterCategory, CharacterPart[]> = {
 
 // Default character for new creations
 export const defaultCharacter: Omit<Character, 'id' | 'createdAt'> = {
-  name: 'New Character',
   body: 'body-1',
   hair: 'hair-1',
   bangs: 'bangs-none',
