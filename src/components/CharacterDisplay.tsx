@@ -22,14 +22,16 @@ const CharacterLayer = ({ category, partId, alt }: {
   
   return (
     <div className="absolute inset-0 flex items-center justify-center">
-      <Image
-        src={part.imageUrl}
-        alt={alt}
-        width={400}
-        height={400}
-        className="max-w-full max-h-full object-contain"
-        loading="lazy"
-      />
+      <div className="relative w-full h-full">
+        <Image
+          src={part.imageUrl}
+          alt={alt}
+          width={200}
+          height={200}
+          className="w-full h-full object-contain"
+          loading="lazy"
+        />
+      </div>
     </div>
   );
 };
@@ -40,9 +42,9 @@ export default function CharacterDisplay({
   showDetails = true 
 }: CharacterDisplayProps) {
   const sizeClasses = {
-    small: 'w-48 h-60',
-    medium: 'w-96 h-[28rem]',
-    large: 'w-[28rem] h-[32rem]'
+    small: 'w-32 h-40',
+    medium: 'w-48 h-60',
+    large: 'w-64 h-80'
   };
 
   const textSizes = {
@@ -76,6 +78,7 @@ export default function CharacterDisplay({
                 src={getPartById('clothes', character.clothes)?.imageUrl}
                 alt="Clothes"
                 className="max-w-full max-h-full object-contain"
+                style={{ transform: 'scale(0.7)' }}
               />
             </div>
             
