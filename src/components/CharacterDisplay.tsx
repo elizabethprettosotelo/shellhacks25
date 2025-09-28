@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Character, getPartById } from "../lib/characterData";
 
 interface CharacterDisplayProps {
@@ -7,6 +8,31 @@ interface CharacterDisplayProps {
   size?: 'small' | 'medium' | 'large';
   showDetails?: boolean;
 }
+
+import { CharacterCategory } from "../lib/characterData";
+
+// Optimized layer component
+const CharacterLayer = ({ category, partId, alt }: { 
+  category: CharacterCategory, 
+  partId: string | undefined, 
+  alt: string 
+}) => {
+  const part = partId ? getPartById(category, partId) : null;
+  if (!part?.imageUrl) return null;
+  
+  return (
+    <div className="absolute inset-0 flex items-center justify-center">
+      <Image
+        src={part.imageUrl}
+        alt={alt}
+        width={400}
+        height={400}
+        className="max-w-full max-h-full object-contain"
+        loading="lazy"
+      />
+    </div>
+  );
+};
 
 export default function CharacterDisplay({ 
   character, 
@@ -32,16 +58,6 @@ export default function CharacterDisplay({
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative w-full h-full">
             {/* Layer the character parts - Hair behind, bangs in front */}
-            
-            {/* Hair (behind everything) */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={getPartById('hair', character.hair)?.imageUrl}
-                alt="Hair"
-                className="max-w-full max-h-full object-contain"
-              />
-            </div>
             
             {/* Body (base layer) */}
             <div className="absolute inset-0 flex items-center justify-center">
@@ -82,14 +98,72 @@ export default function CharacterDisplay({
                 className="max-w-full max-h-full object-contain"
               />
             </div>
+
+            {/* Blush */}
+            {character.blush && character.blush !== 'blush-none' && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={getPartById('blush', character.blush)?.imageUrl}
+                  alt="Blush"
+                  className="max-w-full max-h-full object-contain"
+                />
+              </div>
+            )}
+
+            {/* Facial Accessories (moles, etc.) */}
+            {character.facialAccessory && character.facialAccessory !== 'facialAccessory-none' && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={getPartById('facialAccessory', character.facialAccessory)?.imageUrl}
+                  alt="Facial Accessory"
+                  className="max-w-full max-h-full object-contain"
+                />
+              </div>
+            )}
+
+            {/* Facial Hair */}
+            {character.facialHair && character.facialHair !== 'facialHair-none' && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={getPartById('facialHair', character.facialHair)?.imageUrl}
+                  alt="Facial Hair"
+                  className="max-w-full max-h-full object-contain"
+                />
+              </div>
+            )}
             
-            {/* Bangs (in front of everything) */}
+            {/* Hair */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={getPartById('hair', character.hair)?.imageUrl}
+                alt="Hair"
+                className="max-w-full max-h-full object-contain"
+              />
+            </div>
+            
+            {/* Bangs (in front of hair) */}
             {character.bangs && character.bangs !== 'bangs-none' && (
               <div className="absolute inset-0 flex items-center justify-center">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={getPartById('bangs', character.bangs)?.imageUrl}
                   alt="Bangs"
+                  className="max-w-full max-h-full object-contain"
+                />
+              </div>
+            )}
+
+            {/* Accessories (glasses, etc. - in front of everything) */}
+            {character.accessory && character.accessory !== 'accessory-none' && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={getPartById('accessory', character.accessory)?.imageUrl}
+                  alt="Accessory"
                   className="max-w-full max-h-full object-contain"
                 />
               </div>

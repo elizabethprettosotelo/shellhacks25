@@ -6,7 +6,7 @@ export interface CharacterPart {
   category: CharacterCategory;
 }
 
-export type CharacterCategory = 'body' | 'hair' | 'bangs' | 'eyes' | 'mouth' | 'clothes';
+export type CharacterCategory = 'body' | 'hair' | 'bangs' | 'eyes' | 'mouth' | 'clothes' | 'accessory' | 'blush' | 'facialAccessory' | 'facialHair';
 
 export interface Character {
   id: string;
@@ -17,13 +17,17 @@ export interface Character {
   eyes: string;
   mouth: string;
   clothes: string;
+  accessory?: string; // Optional accessories like glasses
+  blush?: string; // Optional blush
+  facialAccessory?: string; // Optional facial accessories like moles
+  facialHair?: string; // Optional facial hair
   personality?: string[];
   backstory?: string;
   createdAt: Date | string; // Can be Date object or ISO string
   createdFrom?: 'manual' | 'ai-photo';
 }
 
-// Character parts data using real assets from public/charassets
+// Character parts data using real assets from your Google Drive assets
 export const characterParts: Record<CharacterCategory, CharacterPart[]> = {
   body: [
     { id: 'body-1', name: 'Body 1', imageUrl: '/charassets/body/Body 1.PNG', category: 'body' },
@@ -44,6 +48,14 @@ export const characterParts: Record<CharacterCategory, CharacterPart[]> = {
     { id: 'hair-5', name: 'Hair 5', imageUrl: '/charassets/hair/Hair 5.PNG', category: 'hair' },
     { id: 'hair-6', name: 'Hair 6', imageUrl: '/charassets/hair/Hair 6.PNG', category: 'hair' },
     { id: 'hair-7', name: 'Hair 7', imageUrl: '/charassets/hair/Hair 7.PNG', category: 'hair' },
+    { id: 'hair-8', name: 'Hair 8', imageUrl: '/charassets/hair/Hair 8.PNG', category: 'hair' },
+    { id: 'hair-9', name: 'Hair 9', imageUrl: '/charassets/hair/Hair 9.PNG', category: 'hair' },
+    { id: 'hair-10', name: 'Hair 10', imageUrl: '/charassets/hair/Hair 10.PNG', category: 'hair' },
+    { id: 'hair-11', name: 'Hair 11', imageUrl: '/charassets/hair/Hair 11.PNG', category: 'hair' },
+    { id: 'hair-12', name: 'Hair 12', imageUrl: '/charassets/hair/Hair 12.PNG', category: 'hair' },
+    { id: 'hair-13', name: 'Hair 13', imageUrl: '/charassets/hair/Hair 13.PNG', category: 'hair' },
+    { id: 'hair-14', name: 'Hair 14', imageUrl: '/charassets/hair/Hair 14.PNG', category: 'hair' },
+    { id: 'hair-15', name: 'Hair 15', imageUrl: '/charassets/hair/Hair 15.PNG', category: 'hair' },
   ],
   bangs: [
     { id: 'bangs-none', name: 'No Bangs', imageUrl: '', category: 'bangs' },
@@ -54,6 +66,12 @@ export const characterParts: Record<CharacterCategory, CharacterPart[]> = {
     { id: 'bangs-5', name: 'Bangs 5', imageUrl: '/charassets/bangs/Bangs 5.PNG', category: 'bangs' },
     { id: 'bangs-6', name: 'Bangs 6', imageUrl: '/charassets/bangs/Bangs 6.PNG', category: 'bangs' },
     { id: 'bangs-7', name: 'Bangs 7', imageUrl: '/charassets/bangs/Bangs 7.PNG', category: 'bangs' },
+    { id: 'bangs-8', name: 'Bangs 8', imageUrl: '/charassets/bangs/Bangs 8.PNG', category: 'bangs' },
+    { id: 'bangs-9', name: 'Bangs 9', imageUrl: '/charassets/bangs/Bangs 9.PNG', category: 'bangs' },
+    { id: 'bangs-10', name: 'Bangs 10', imageUrl: '/charassets/bangs/Bangs 10.PNG', category: 'bangs' },
+    { id: 'bangs-11', name: 'Bangs 11', imageUrl: '/charassets/bangs/Bangs 11.PNG', category: 'bangs' },
+    { id: 'bangs-12', name: 'Bangs 12', imageUrl: '/charassets/bangs/Bangs 12.PNG', category: 'bangs' },
+    { id: 'bangs-13', name: 'Bangs 13', imageUrl: '/charassets/bangs/Banngs 13.PNG', category: 'bangs' },
   ],
   eyes: [
     { id: 'eyes-1', name: 'Eyes 1', imageUrl: '/charassets/eyes/Eyes 1.PNG', category: 'eyes' },
@@ -85,6 +103,29 @@ export const characterParts: Record<CharacterCategory, CharacterPart[]> = {
     { id: 'clothes-4', name: 'Clothes 4', imageUrl: '/charassets/clothes/Clothes 4.PNG', category: 'clothes' },
     { id: 'clothes-5', name: 'Clothes 5', imageUrl: '/charassets/clothes/Clothes 5.PNG', category: 'clothes' },
     { id: 'clothes-6', name: 'Clothes 6', imageUrl: '/charassets/clothes/Clothes 6.PNG', category: 'clothes' },
+    { id: 'clothes-7', name: 'Clothes 7', imageUrl: '/charassets/clothes/Clothes 7.PNG', category: 'clothes' },
+    { id: 'clothes-8', name: 'Clothes 8', imageUrl: '/charassets/clothes/Clothes 8.PNG', category: 'clothes' },
+  ],
+  accessory: [
+    { id: 'accessory-none', name: 'No Accessory', imageUrl: '', category: 'accessory' },
+    { id: 'accessory-1', name: 'Glasses', imageUrl: '/charassets/accessory/Glasses.PNG', category: 'accessory' },
+  ],
+  blush: [
+    { id: 'blush-none', name: 'No Blush', imageUrl: '', category: 'blush' },
+    { id: 'blush-1', name: 'Blush 1', imageUrl: '/charassets/blush/Blush 1.PNG', category: 'blush' },
+  ],
+  facialAccessory: [
+    { id: 'facialAccessory-none', name: 'No Facial Accessory', imageUrl: '', category: 'facialAccessory' },
+    { id: 'facialAccessory-1', name: 'Mole 1', imageUrl: '/charassets/facial accessory/Mole 1.PNG', category: 'facialAccessory' },
+    { id: 'facialAccessory-2', name: 'Mole 2', imageUrl: '/charassets/facial accessory/Mole 2.PNG', category: 'facialAccessory' },
+  ],
+  facialHair: [
+    { id: 'facialHair-none', name: 'No Facial Hair', imageUrl: '', category: 'facialHair' },
+    { id: 'facialHair-1', name: 'Facial Hair 1', imageUrl: '/charassets/facial hair/Facial Hair 1.PNG', category: 'facialHair' },
+    { id: 'facialHair-2', name: 'Facial Hair 2', imageUrl: '/charassets/facial hair/Facial Hair 2.PNG', category: 'facialHair' },
+    { id: 'facialHair-3', name: 'Facial Hair 3', imageUrl: '/charassets/facial hair/Facial Hair 3.PNG', category: 'facialHair' },
+    { id: 'facialHair-4', name: 'Facial Hair 4', imageUrl: '/charassets/facial hair/Facial Hair 4.PNG', category: 'facialHair' },
+    { id: 'facialHair-5', name: 'Facial Hair 5', imageUrl: '/charassets/facial hair/Facial Hair 5.PNG', category: 'facialHair' },
   ],
 };
 
@@ -97,6 +138,10 @@ export const defaultCharacter: Omit<Character, 'id' | 'createdAt'> = {
   eyes: 'eyes-1',
   mouth: 'mouth-1',
   clothes: 'clothes-1',
+  accessory: 'accessory-none',
+  blush: 'blush-none',
+  facialAccessory: 'facialAccessory-none',
+  facialHair: 'facialHair-none',
   personality: [],
   backstory: '',
 };

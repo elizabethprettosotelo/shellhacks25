@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -8,9 +9,9 @@ import {
   CharacterCategory,
   defaultCharacter,
   characterParts,
-  personalityTraits,
   getPartById,
-} from "../lib/characterData";
+  personalityTraits,
+} from "@/lib/characterData";
 
 interface CharacterCreatorProps {
   onCharacterComplete?: (character: Character) => void;
@@ -128,8 +129,50 @@ export default function CharacterCreator({ onCharacterComplete, initialCharacter
           />
         </div>
       </div>
+
+      {/* Blush */}
+      {character.blush && character.blush !== 'blush-none' && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="relative" style={{ transform: 'translate(80px, 40px)' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={getPartById('blush', character.blush)?.imageUrl}
+              alt="Blush"
+              className="w-full h-full object-contain scale-110"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Facial Accessories */}
+      {character.facialAccessory && character.facialAccessory !== 'facialAccessory-none' && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="relative" style={{ transform: 'translate(80px, 40px)' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={getPartById('facialAccessory', character.facialAccessory)?.imageUrl}
+              alt="Facial Accessory"
+              className="w-full h-full object-contain scale-110"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Facial Hair */}
+      {character.facialHair && character.facialHair !== 'facialHair-none' && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="relative" style={{ transform: 'translate(80px, 40px)' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={getPartById('facialHair', character.facialHair)?.imageUrl}
+              alt="Facial Hair"
+              className="w-full h-full object-contain scale-110"
+            />
+          </div>
+        </div>
+      )}
       
-      {/* Bangs (in front of everything) */}
+      {/* Bangs (in front of hair) */}
       {character.bangs && character.bangs !== 'bangs-none' && (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative" style={{ transform: 'translate(80px, 40px)' }}>
@@ -137,6 +180,20 @@ export default function CharacterCreator({ onCharacterComplete, initialCharacter
             <img
               src={getPartById('bangs', character.bangs)?.imageUrl}
               alt="Bangs"
+              className="w-full h-full object-contain scale-110"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Accessories (in front of everything) */}
+      {character.accessory && character.accessory !== 'accessory-none' && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="relative" style={{ transform: 'translate(80px, 40px)' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={getPartById('accessory', character.accessory)?.imageUrl}
+              alt="Accessory"
               className="w-full h-full object-contain scale-110"
             />
           </div>
@@ -166,12 +223,20 @@ export default function CharacterCreator({ onCharacterComplete, initialCharacter
             }`}
           >
             <div className="w-16 h-16 bg-gray-100 rounded mx-auto mb-2 overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={part.imageUrl}
-                alt={part.name}
-                className="w-full h-full object-contain"
-              />
+              {part.imageUrl ? (
+                <Image
+                  src={part.imageUrl}
+                  alt={part.name}
+                  width={64}
+                  height={64}
+                  className="w-full h-full object-contain"
+                  loading="lazy"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                  None
+                </div>
+              )}
             </div>
             <p className="text-sm font-medium">{part.name}</p>
           </button>
@@ -226,6 +291,10 @@ export default function CharacterCreator({ onCharacterComplete, initialCharacter
               <PartSelector category="eyes" title="Eyes" />
               <PartSelector category="mouth" title="Expression" />
               <PartSelector category="clothes" title="Outfit" />
+              <PartSelector category="accessory" title="Glasses" />
+              <PartSelector category="blush" title="Blush" />
+              <PartSelector category="facialAccessory" title="Moles" />
+              <PartSelector category="facialHair" title="Facial Hair" />
             </TabsContent>
 
             <TabsContent value="personality" className="space-y-4">

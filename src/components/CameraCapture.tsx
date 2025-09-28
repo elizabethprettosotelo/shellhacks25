@@ -242,6 +242,10 @@ CRITICAL INSTRUCTIONS:
   "eyes": "eyes-X",
   "mouth": "mouth-X",
   "clothes": "clothes-X",
+  "accessory": "accessory-X or accessory-none (optional)",
+  "blush": "blush-X or blush-none (optional)",
+  "facialAccessory": "facialAccessory-X or facialAccessory-none (optional)",
+  "facialHair": "facialHair-X or facialHair-none (optional)",
   "reasoning": "brief explanation of choices"
 }
 ===END_JSON===
@@ -330,7 +334,11 @@ Remember: ONLY return the JSON wrapped in the markers above, nothing else.`;
           bangs: characterParts.bangs.find(p => p.id === newCharacter.bangs),
           eyes: characterParts.eyes.find(p => p.id === newCharacter.eyes),
           mouth: characterParts.mouth.find(p => p.id === newCharacter.mouth),
-          clothes: characterParts.clothes.find(p => p.id === newCharacter.clothes)
+          clothes: characterParts.clothes.find(p => p.id === newCharacter.clothes),
+          accessory: newCharacter.accessory ? characterParts.accessory.find(p => p.id === newCharacter.accessory) : null,
+          blush: newCharacter.blush ? characterParts.blush.find(p => p.id === newCharacter.blush) : null,
+          facialAccessory: newCharacter.facialAccessory ? characterParts.facialAccessory.find(p => p.id === newCharacter.facialAccessory) : null,
+          facialHair: newCharacter.facialHair ? characterParts.facialHair.find(p => p.id === newCharacter.facialHair) : null
         },
         timestamp: new Date().toISOString()
       };
@@ -822,7 +830,18 @@ REASONING: [brief explanation of why you chose these specific assets to match th
                       </p>
                     )}
                     <div className="text-xs text-gray-500">
-                      <p><strong>Assets:</strong> {characterSuggestion.body}, {characterSuggestion.hair}, {characterSuggestion.bangs}, {characterSuggestion.eyes}, {characterSuggestion.mouth}, {characterSuggestion.clothes}</p>
+                      <p><strong>Core Assets:</strong> {characterSuggestion.body}, {characterSuggestion.hair}, {characterSuggestion.bangs}, {characterSuggestion.eyes}, {characterSuggestion.mouth}, {characterSuggestion.clothes}</p>
+                      {(characterSuggestion.accessory && characterSuggestion.accessory !== 'accessory-none') ||
+                       (characterSuggestion.blush && characterSuggestion.blush !== 'blush-none') ||
+                       (characterSuggestion.facialAccessory && characterSuggestion.facialAccessory !== 'facialAccessory-none') ||
+                       (characterSuggestion.facialHair && characterSuggestion.facialHair !== 'facialHair-none') ? (
+                        <p><strong>Additional:</strong> {[
+                          characterSuggestion.accessory && characterSuggestion.accessory !== 'accessory-none' ? characterSuggestion.accessory : null,
+                          characterSuggestion.blush && characterSuggestion.blush !== 'blush-none' ? characterSuggestion.blush : null,
+                          characterSuggestion.facialAccessory && characterSuggestion.facialAccessory !== 'facialAccessory-none' ? characterSuggestion.facialAccessory : null,
+                          characterSuggestion.facialHair && characterSuggestion.facialHair !== 'facialHair-none' ? characterSuggestion.facialHair : null
+                        ].filter(Boolean).join(', ')}</p>
+                      ) : null}
                     </div>
                   </div>
                 </div>
