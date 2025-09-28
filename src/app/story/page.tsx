@@ -37,7 +37,7 @@ export default function StoryReaderPage() {
     const right = getScene(index + 1);
 
     // Reset states unless it's a special case
-    if (!(['3a1', '3a2'].includes(left?.id) && right?.id === '3b')) {
+    if (!(left?.id === '3a' && right?.id === '3b')) {
       setPhase(0);
       setLeftVisible(false);
       setRightVisible(false);
@@ -47,7 +47,7 @@ export default function StoryReaderPage() {
     const leftTimer = setTimeout(() => setLeftVisible(true), 10);
     
     // Show right page immediately for special cases
-    if (left?.terminal || (left?.id && ['3a1', '3a2'].includes(left.id) && right?.id === '3b')) {
+    if (left?.terminal || (left?.id === '3a' && right?.id === '3b')) {
       const rightTimer = setTimeout(() => {
         setPhase(1);
         setRightVisible(true);
@@ -186,18 +186,7 @@ export default function StoryReaderPage() {
       return;
     }
 
-    // 🚫 Rule 2: 3a1 and 3a2 are mutually exclusive
-    if (sceneId === '3a1' || sceneId === '3a2') {
-      const mutuallyExclusive = new Set(['3a1', '3a2']);
-      const hasVisitedOther = Array.from(mutuallyExclusive).some(
-        id => id !== sceneId && visitedScenes.has(id)
-      );
-      if (hasVisitedOther) {
-        setChoiceMessage('You cannot visit this path after choosing the other option');
-        setTimeout(() => setChoiceMessage(''), 2000);
-        return;
-      }
-    }
+    // No mutual exclusivity rule required for 3a (single scene)
 
     // Update visited scenes
     setVisitedScenes(prev => new Set([...prev, sceneId]));
@@ -205,9 +194,9 @@ export default function StoryReaderPage() {
     const targetIndex = scenes.findIndex(s => s.id === sceneId);
     if (targetIndex < 0) return;
 
-    // ⭐ Special handling for 3a1/3a2 → always show with 3b
-    if (sceneId === '3a1' || sceneId === '3a2') {
-      setIndex(targetIndex); // set to 3a1 or 3a2
+    // ⭐ Special handling for 3a → always show with 3b
+    if (sceneId === '3a') {
+      setIndex(targetIndex); // set to 3a
       setPhase(1);
       setLeftVisible(true);
       setRightVisible(true);

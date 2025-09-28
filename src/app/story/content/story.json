@@ -123,27 +123,17 @@
       "caption": "Placeholder caption for 2h",
       "imageNeedsGemini": false,
       "choices": [
-        { "id": "to_3a1", "label": "Go to 3a1", "target": "3a1" },
-        { "id": "to_3a2", "label": "Go to 3a2", "target": "3a2" }
+        { "id": "to_3a", "label": "Continue", "target": "3a" }
       ]
     },
     {
-      "id": "3a1",
+      "id": "3a",
       "setting": "path3",
-      "text": "Scene 3a1: Short filler. This will route into 3b.",
+      "text": "Scene 3a: Short filler. This will route into 3b.",
       "imageLeft": "/charassets/placeholder-left.png",
-      "imageRight": "https://picsum.photos/seed/3a1/600",
-      "caption": "Placeholder caption for 3a1",
-      "choices": [ { "id": "to_3b_from_3a1", "label": "Continue to 3b", "target": "3b" } ]
-    },
-    {
-      "id": "3a2",
-      "setting": "path3",
-      "text": "Scene 3a2: Short filler. This will route into 3b.",
-      "imageLeft": "/charassets/placeholder-left.png",
-      "imageRight": "https://picsum.photos/seed/3a2/600",
-      "caption": "Placeholder caption for 3a2",
-      "choices": [ { "id": "to_3b_from_3a2", "label": "Continue to 3b", "target": "3b" } ]
+      "imageRight": "https://picsum.photos/seed/3a/600",
+      "caption": "Placeholder caption for 3a",
+      "choices": [ { "id": "to_3b_from_3a", "label": "Continue to 3b", "target": "3b" } ]
     },
     {
       "id": "3b",
