@@ -19,7 +19,7 @@ export default function TestInstructions() {
             <ol className="space-y-3 text-gray-700">
               <li className="flex items-start">
                 <span className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-3 mt-0.5">1</span>
-                <span>Navigate to <code className="bg-gray-100 px-2 py-1 rounded">/capture</code> page</span>
+                <span>Navigate to <code className="bg-gray-100 px-2 py-1 rounded">/char</code> page and select &ldquo;Create from Photo&rdquo;</span>
               </li>
               <li className="flex items-start">
                 <span className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-3 mt-0.5">2</span>
@@ -76,10 +76,10 @@ export default function TestInstructions() {
           <h2 className="text-2xl font-semibold mb-4">🚀 Quick Actions</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <a 
-              href="/capture" 
+              href="/char" 
               className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-center transition-colors"
             >
-              📸 Go to Camera
+              📸 Go to Character Creator
             </a>
             <button 
               onClick={() => window.location.reload()}

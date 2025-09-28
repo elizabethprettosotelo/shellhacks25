@@ -4,13 +4,13 @@ import { useState } from "react";
 import { useSimpleNavigation } from "@/hooks/useSimpleNavigation";
 import { useCharacterContext } from "@/contexts/CharacterContext";
 import CharacterCreator from "../../components/CharacterCreator";
-import CharacterDisplay from "../../components/CharacterDisplay";
+import CameraCapture from "../../components/CameraCapture";
 import { Button } from "@/components/ui/button";
 import { Character } from "@/lib/characterData";
 
 export default function CharacterPage() {
   useSimpleNavigation();
-  const { saveCharacter, setCurrentCharacter, currentCharacter } = useCharacterContext();
+  const { saveCharacter, setCurrentCharacter } = useCharacterContext();
   const [mode, setMode] = useState<'selection' | 'create-manual' | 'create-photo'>('selection');
 
   const handleCharacterComplete = (character: Character) => {
@@ -20,13 +20,17 @@ export default function CharacterPage() {
   };
 
   const handleTakePhoto = () => {
-    // Navigate to capture page for photo-based character creation
-    window.location.href = '/capture?mode=character';
+    setMode('create-photo');
   };
 
   if (mode === 'create-manual') {
     return (
-      <div className="min-h-screen w-screen bg-gradient-to-br from-yellow-100 to-orange-100 p-4 overflow-auto">
+      <div 
+        className="min-h-screen w-screen bg-cover bg-center bg-no-repeat p-4 overflow-auto"
+        style={{
+          backgroundImage: "url('/images/notebook-lined-paper-texture-background_35652-715.jpg')"
+        }}
+      >
         <div className="mb-4">
           <Button 
             variant="outline"
@@ -41,8 +45,35 @@ export default function CharacterPage() {
     );
   }
 
+  if (mode === 'create-photo') {
+    return (
+      <div 
+        className="min-h-screen w-screen bg-cover bg-center bg-no-repeat p-4 overflow-auto"
+        style={{
+          backgroundImage: "url('/images/notebook-lined-paper-texture-background_35652-715.jpg')"
+        }}
+      >
+        <div className="mb-4">
+          <Button 
+            variant="outline"
+            onClick={() => setMode('selection')}
+            className="mb-4"
+          >
+            ← Back to Character Selection
+          </Button>
+        </div>
+        <CameraCapture mode="character" onCharacterCreated={handleCharacterComplete} />
+      </div>
+    );
+  }
+
   return (
-    <div className="h-screen w-screen flex flex-col items-center justify-center bg-gradient-to-br from-yellow-100 to-orange-100 p-8">
+    <div 
+      className="h-screen w-screen flex flex-col items-center justify-center bg-cover bg-center bg-no-repeat p-8"
+      style={{
+        backgroundImage: "url('/images/notebook-lined-paper-texture-background_35652-715.jpg')"
+      }}
+    >
       <div className="max-w-4xl mx-auto text-center space-y-8">
         <div>
           <h1 className="text-4xl font-bold text-gray-800 mb-4">Create Your Character</h1>
@@ -50,26 +81,6 @@ export default function CharacterPage() {
             Every great adventure needs a hero. Choose how you&rsquo;d like to create your character:
           </p>
         </div>
-
-        {/* Current Character Display */}
-        {currentCharacter && (
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-green-800 mb-4 text-center">Your Current Character</h2>
-            <CharacterDisplay 
-              character={currentCharacter} 
-              size="medium" 
-              showDetails={true}
-            />
-            <div className="text-center mt-4">
-              <Button 
-                variant="outline" 
-                onClick={() => setMode('create-manual')}
-              >
-                Edit Character
-              </Button>
-            </div>
-          </div>
-        )}
 
         {/* Character Creation Options */}
         <div className="grid md:grid-cols-2 gap-8">

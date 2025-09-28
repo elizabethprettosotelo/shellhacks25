@@ -21,8 +21,6 @@ export interface Character {
   blush?: string; // Optional blush
   facialAccessory?: string; // Optional facial accessories like moles
   facialHair?: string; // Optional facial hair
-  personality?: string[];
-  backstory?: string;
   createdAt: Date | string; // Can be Date object or ISO string
   createdFrom?: 'manual' | 'ai-photo';
 }
@@ -142,16 +140,7 @@ export const defaultCharacter: Omit<Character, 'id' | 'createdAt'> = {
   blush: 'blush-none',
   facialAccessory: 'facialAccessory-none',
   facialHair: 'facialHair-none',
-  personality: [],
-  backstory: '',
 };
-
-// Personality traits for character building
-export const personalityTraits = [
-  'Brave', 'Curious', 'Funny', 'Kind', 'Smart', 'Creative', 'Adventurous',
-  'Loyal', 'Mysterious', 'Optimistic', 'Determined', 'Witty', 'Caring',
-  'Bold', 'Thoughtful', 'Energetic', 'Patient', 'Imaginative'
-];
 
 // Helper functions
 export const getPartById = (category: CharacterCategory, id: string): CharacterPart | undefined => {

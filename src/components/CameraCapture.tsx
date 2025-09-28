@@ -4,7 +4,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { generateContentWithImage } from "../lib/gemini";
 import { Button } from "@/components/ui/button";
 import { useCharacterContext } from "@/contexts/CharacterContext";
-import { Character, defaultCharacter, personalityTraits, characterParts } from "../lib/characterData";
+import { Character, defaultCharacter, characterParts } from "../lib/characterData";
 import CameraTroubleshooting from "./CameraTroubleshooting";
 import CharacterDisplay from "./CharacterDisplay";
 
@@ -234,8 +234,6 @@ CRITICAL INSTRUCTIONS:
 ===START_JSON===
 {
   "name": "character name",
-  "personality": ["trait1", "trait2"],
-  "backstory": "character backstory",
   "body": "body-X",
   "hair": "hair-X", 
   "bangs": "bangs-X or bangs-none",
@@ -392,6 +390,11 @@ INSTRUCTIONS:
 7. Generate personality traits based on their appearance/vibe
 8. Create a character name and backstory
 
+5. Choose appropriate clothing
+6. Pick the best fitting accessory (if any match)
+7. Select blush, facial accessories, and facial hair if appropriate
+8. Create a character name that fits their appearance
+
 Respond EXACTLY in this format:
 BODY: [body-X]
 HAIR: [hair-X]
@@ -400,8 +403,6 @@ EYES: [eyes-X]
 MOUTH: [mouth-X]
 CLOTHES: [clothes-X]
 NAME: [character name]
-TRAITS: [comma separated personality traits from: ${personalityTraits.join(', ')}]
-BACKSTORY: [2-3 sentence backstory]
 REASONING: [brief explanation of why you chose these specific assets to match their appearance]`;
       
       const response = await generateContentWithImage(
@@ -428,8 +429,6 @@ REASONING: [brief explanation of why you chose these specific assets to match th
   const parseCharacterResponse = (response: string): Partial<Character> => {
     const lines = response.split('\n');
     let name = 'Adventurer';
-    let traits: string[] = [];
-    let backstory = '';
     let body = defaultCharacter.body;
     let hair = defaultCharacter.hair;
     let bangs = defaultCharacter.bangs;
@@ -440,11 +439,6 @@ REASONING: [brief explanation of why you chose these specific assets to match th
     lines.forEach(line => {
       if (line.startsWith('NAME:')) {
         name = line.replace('NAME:', '').trim();
-      } else if (line.startsWith('TRAITS:')) {
-        const traitsText = line.replace('TRAITS:', '').trim();
-        traits = traitsText.split(',').map(t => t.trim()).filter(t => personalityTraits.includes(t));
-      } else if (line.startsWith('BACKSTORY:')) {
-        backstory = line.replace('BACKSTORY:', '').trim();
       } else if (line.startsWith('BODY:')) {
         const bodyId = line.replace('BODY:', '').trim();
         if (bodyId && bodyId.startsWith('body-')) {
@@ -480,8 +474,6 @@ REASONING: [brief explanation of why you chose these specific assets to match th
 
     return {
       name,
-      personality: traits,
-      backstory,
       body,
       hair,
       bangs,
@@ -499,7 +491,7 @@ REASONING: [brief explanation of why you chose these specific assets to match th
     const newCharacter: Character = {
       ...defaultCharacter,
       ...characterSuggestion,
-      id: `char-${Date.now()}`,
+      id: 'char-' + Date.now(),
       createdAt: new Date(),
       createdFrom: 'ai-photo',
     };
@@ -521,7 +513,7 @@ REASONING: [brief explanation of why you chose these specific assets to match th
 
     const link = document.createElement('a');
     link.href = capturedImage;
-    link.download = `camera-capture-${new Date().getTime()}.jpg`;
+    link.download = 'camera-capture-' + new Date().getTime() + '.jpg';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -533,50 +525,50 @@ REASONING: [brief explanation of why you chose these specific assets to match th
       let info = "🖥️ Browser & Device Diagnostics:\n\n";
       
       // Browser info
-      info += `🌐 User Agent: ${navigator.userAgent}\n`;
-      info += `📍 Protocol: ${window.location.protocol}\n`;
-      info += `🏠 Host: ${window.location.host}\n`;
-      info += `🔒 Secure Context: ${window.isSecureContext ? '✅ Yes' : '❌ No (HTTPS required for camera)'}\n`;
+      info += "🌐 User Agent: " + navigator.userAgent + "\n";
+      info += "📍 Protocol: " + window.location.protocol + "\n";
+      info += "🏠 Host: " + window.location.host + "\n";
+      info += "🔒 Secure Context: " + (window.isSecureContext ? '✅ Yes' : '❌ No (HTTPS required for camera)') + "\n";
       
       // Check if we're in an embedded browser
       if (navigator.userAgent.includes('VS Code')) {
-        info += `⚠️ Embedded Browser: VS Code Simple Browser detected\n`;
-        info += `💡 Tip: Camera might not work in embedded browsers. Try external browser.\n`;
+        info += "⚠️ Embedded Browser: VS Code Simple Browser detected\n";
+        info += "💡 Tip: Camera might not work in embedded browsers. Try external browser.\n";
       }
       
       // Check getUserMedia support
-      info += `📹 getUserMedia: ${(navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') ? '✅ Supported' : '❌ Not supported'}\n`;
+      info += "📹 getUserMedia: " + ((navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') ? '✅ Supported' : '❌ Not supported') + "\n";
       
       // Check if we can enumerate devices
       try {
         if (navigator.mediaDevices?.enumerateDevices) {
           const devices = await navigator.mediaDevices.enumerateDevices();
           const videoDevices = devices.filter(d => d.kind === 'videoinput');
-          info += `🎥 Video Devices: ${videoDevices.length} found\n`;
+          info += "🎥 Video Devices: " + videoDevices.length + " found\n";
           if (videoDevices.length === 0) {
-            info += `❌ No camera devices detected. Make sure camera is connected and not in use.\n`;
+            info += "❌ No camera devices detected. Make sure camera is connected and not in use.\n";
           }
         } else {
-          info += `🎥 Device Enumeration: ❌ Not supported\n`;
+          info += "🎥 Device Enumeration: ❌ Not supported\n";
         }
       } catch {
-        info += `🎥 Device Enumeration: ❌ Permission needed or blocked\n`;
+        info += "🎥 Device Enumeration: ❌ Permission needed or blocked\n";
       }
       
       // Check current camera state
-      info += `📺 Camera Active: ${cameraActive ? '✅ Yes' : '❌ No'}\n`;
-      info += `📸 Image Captured: ${capturedImage ? '✅ Yes' : '❌ No'}\n`;
+      info += "📺 Camera Active: " + (cameraActive ? '✅ Yes' : '❌ No') + "\n";
+      info += "📸 Image Captured: " + (capturedImage ? '✅ Yes' : '❌ No') + "\n";
       
       // Add troubleshooting tips
-      info += `\n🔧 Troubleshooting Tips:\n`;
-      info += `• Try opening this page in Chrome/Firefox (not embedded browser)\n`;
-      info += `• Make sure camera isn't used by other apps\n`;
-      info += `• Check browser permissions for camera access\n`;
-      info += `• Ensure you're on HTTPS or localhost\n`;
+      info += "\n🔧 Troubleshooting Tips:\n";
+      info += "• Try opening this page in Chrome/Firefox (not embedded browser)\n";
+      info += "• Make sure camera isn't used by other apps\n";
+      info += "• Check browser permissions for camera access\n";
+      info += "• Ensure you're on HTTPS or localhost\n";
       
       setDiagnosticInfo(info);
     } catch (error) {
-      setDiagnosticInfo(`Error getting diagnostics: ${error}`);
+      setDiagnosticInfo("Error getting diagnostics: " + error);
     }
   };
 
@@ -744,16 +736,7 @@ REASONING: [brief explanation of why you chose these specific assets to match th
                         {/* Character Info */}
                         <div className="flex-1 min-w-0">
                           <h4 className="font-semibold text-lg">{characterSuggestion.name}</h4>
-                          {characterSuggestion.personality && characterSuggestion.personality.length > 0 && (
-                            <p className="text-sm text-gray-600 mb-2">
-                              <strong>Traits:</strong> {characterSuggestion.personality.join(', ')}
-                            </p>
-                          )}
-                          {characterSuggestion.backstory && (
-                            <p className="text-sm text-gray-700">
-                              <strong>Story:</strong> {characterSuggestion.backstory}
-                            </p>
-                          )}
+                          <p className="text-sm text-gray-600">Character created from photo analysis</p>
                         </div>
                       </div>
                     </div>
@@ -819,16 +802,7 @@ REASONING: [brief explanation of why you chose these specific assets to match th
                   {/* Character Info */}
                   <div className="flex-1 min-w-0">
                     <h4 className="font-semibold text-lg">{characterSuggestion.name}</h4>
-                    {characterSuggestion.personality && characterSuggestion.personality.length > 0 && (
-                      <p className="text-sm text-gray-600 mb-2">
-                        <strong>Traits:</strong> {characterSuggestion.personality.join(', ')}
-                      </p>
-                    )}
-                    {characterSuggestion.backstory && (
-                      <p className="text-sm text-gray-700 mb-2">
-                        <strong>Story:</strong> {characterSuggestion.backstory}
-                      </p>
-                    )}
+                    <p className="text-sm text-gray-600 mb-2">Character created from photo analysis</p>
                     <div className="text-xs text-gray-500">
                       <p><strong>Core Assets:</strong> {characterSuggestion.body}, {characterSuggestion.hair}, {characterSuggestion.bangs}, {characterSuggestion.eyes}, {characterSuggestion.mouth}, {characterSuggestion.clothes}</p>
                       {(characterSuggestion.accessory && characterSuggestion.accessory !== 'accessory-none') ||

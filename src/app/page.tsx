@@ -6,7 +6,12 @@ export default function HomePage() {
   useSimpleNavigation();
 
   return (
-    <div className="h-screen w-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100">
+    <div 
+      className="h-screen w-screen flex flex-col items-center justify-center bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage: "url('/images/notebook-lined-paper-texture-background_35652-715.jpg')"
+      }}
+    >
       <div className="text-center space-y-6 max-w-md mx-auto p-6">
         <h1 className="text-5xl font-bold text-gray-800 mb-4">Character Creator</h1>
         <div className="bg-white/80 backdrop-blur rounded-lg p-6 shadow-lg">

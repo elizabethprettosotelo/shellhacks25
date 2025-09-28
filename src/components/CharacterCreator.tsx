@@ -3,14 +3,12 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Character,
   CharacterCategory,
   defaultCharacter,
   characterParts,
   getPartById,
-  personalityTraits,
 } from "@/lib/characterData";
 
 interface CharacterCreatorProps {
@@ -24,8 +22,6 @@ export default function CharacterCreator({ onCharacterComplete, initialCharacter
     ...initialCharacter,
   });
 
-  const [currentStep, setCurrentStep] = useState<'appearance' | 'personality' | 'story'>('appearance');
-
   // Update character part
   const updateCharacterPart = (category: CharacterCategory, partId: string) => {
     setCharacter(prev => ({
@@ -34,24 +30,9 @@ export default function CharacterCreator({ onCharacterComplete, initialCharacter
     }));
   };
 
-  // Toggle personality trait
-  const togglePersonalityTrait = (trait: string) => {
-    setCharacter(prev => ({
-      ...prev,
-      personality: prev.personality?.includes(trait)
-        ? prev.personality.filter(t => t !== trait)
-        : [...(prev.personality || []), trait],
-    }));
-  };
-
   // Update character name
   const updateName = (name: string) => {
     setCharacter(prev => ({ ...prev, name }));
-  };
-
-  // Update backstory
-  const updateBackstory = (backstory: string) => {
-    setCharacter(prev => ({ ...prev, backstory }));
   };
 
   // Complete character creation
@@ -272,99 +253,32 @@ export default function CharacterCreator({ onCharacterComplete, initialCharacter
 
         {/* Character Creator */}
         <div className="lg:col-span-2">
-          <Tabs value={currentStep} onValueChange={(value) => setCurrentStep(value as 'appearance' | 'personality' | 'story')}>
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="appearance">Appearance</TabsTrigger>
-              <TabsTrigger value="personality">Personality</TabsTrigger>
-              <TabsTrigger value="story">Story</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="appearance" className="space-y-6">
-              <PartSelector category="body" title="Body Type" />
-              <PartSelector category="hair" title="Hair Style" />
-              <PartSelector category="bangs" title="Bangs" />
-              <PartSelector category="eyes" title="Eyes" />
-              <PartSelector category="mouth" title="Expression" />
-              <PartSelector category="clothes" title="Outfit" />
-              <PartSelector category="accessory" title="Glasses" />
-              <PartSelector category="blush" title="Blush" />
-              <PartSelector category="facialAccessory" title="Moles" />
-              <PartSelector category="facialHair" title="Facial Hair" />
-            </TabsContent>
-
-            <TabsContent value="personality" className="space-y-4">
-              <h3 className="text-lg font-semibold">Personality Traits</h3>
-              <p className="text-gray-600">Select traits that describe your character (choose up to 5):</p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {personalityTraits.map((trait) => (
-                  <button
-                    key={trait}
-                    onClick={() => togglePersonalityTrait(trait)}
-                    disabled={!character.personality?.includes(trait) && (character.personality?.length || 0) >= 5}
-                    className={`p-3 border-2 rounded-lg transition-all ${
-                      character.personality?.includes(trait)
-                        ? 'border-purple-500 bg-purple-50 text-purple-700'
-                        : 'border-gray-200 hover:border-gray-300'
-                    } disabled:opacity-50 disabled:cursor-not-allowed`}
-                  >
-                    {trait}
-                  </button>
-                ))}
-              </div>
-              <p className="text-sm text-gray-500">
-                Selected: {character.personality?.length || 0}/5
-              </p>
-            </TabsContent>
-
-            <TabsContent value="story" className="space-y-4">
-              <h3 className="text-lg font-semibold">Character Backstory</h3>
-              <p className="text-gray-600">Tell us about your character&rsquo;s background:</p>
-              <textarea
-                value={character.backstory || ''}
-                onChange={(e) => updateBackstory(e.target.value)}
-                className="w-full h-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Where did your character come from? What motivates them? What's their goal?"
-              />
-              
-              <div className="flex justify-between pt-4">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setCurrentStep('personality')}
-                >
-                  ← Back
-                </Button>
-                <Button 
-                  onClick={completeCharacter}
-                  className="bg-green-600 hover:bg-green-700"
-                >
-                  Complete Character ✨
-                </Button>
-              </div>
-            </TabsContent>
-          </Tabs>
-
-          {/* Navigation buttons for appearance and personality tabs */}
-          {currentStep === 'appearance' && (
-            <div className="flex justify-end pt-4">
-              <Button onClick={() => setCurrentStep('personality')}>
-                Next: Personality →
-              </Button>
+          <div className="space-y-6">
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold mb-4">Character Appearance</h3>
+              <p className="text-gray-600">Customize your character&rsquo;s physical appearance:</p>
             </div>
-          )}
-
-          {currentStep === 'personality' && (
-            <div className="flex justify-between pt-4">
+            
+            <PartSelector category="body" title="Body Type" />
+            <PartSelector category="hair" title="Hair Style" />
+            <PartSelector category="bangs" title="Bangs" />
+            <PartSelector category="eyes" title="Eyes" />
+            <PartSelector category="mouth" title="Expression" />
+            <PartSelector category="clothes" title="Outfit" />
+            <PartSelector category="accessory" title="Glasses" />
+            <PartSelector category="blush" title="Blush" />
+            <PartSelector category="facialAccessory" title="Moles" />
+            <PartSelector category="facialHair" title="Facial Hair" />
+            
+            <div className="flex justify-end pt-6">
               <Button 
-                variant="outline" 
-                onClick={() => setCurrentStep('appearance')}
+                onClick={completeCharacter}
+                className="bg-green-600 hover:bg-green-700"
               >
-                ← Back
-              </Button>
-              <Button onClick={() => setCurrentStep('story')}>
-                Next: Story →
+                Complete Character →
               </Button>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

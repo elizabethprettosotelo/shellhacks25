@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 
-const PAGES = ['/', '/capture', '/char', '/story'];
+const PAGES = ['/', '/char', '/story'];
 
 export function useSimpleNavigation() {
   const router = useRouter();

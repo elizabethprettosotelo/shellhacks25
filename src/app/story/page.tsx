@@ -7,7 +7,12 @@ export default function Page4() {
   useSimpleNavigation();
 
   return (
-    <div className="h-screen w-screen flex flex-col items-center justify-center bg-gradient-to-br from-purple-100 to-pink-100">
+    <div 
+      className="h-screen w-screen flex flex-col items-center justify-center bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage: "url('/images/notebook-lined-paper-texture-background_35652-715.jpg')"
+      }}
+    >
       <div className="text-center space-y-6">
         <h1 className="text-4xl font-bold text-gray-800">Page 4 - Abstract</h1>
         <Image 

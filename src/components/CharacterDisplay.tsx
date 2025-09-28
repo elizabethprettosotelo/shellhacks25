@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { Character, getPartById } from "../lib/characterData";
 
 interface CharacterDisplayProps {
@@ -8,33 +7,6 @@ interface CharacterDisplayProps {
   size?: 'small' | 'medium' | 'large';
   showDetails?: boolean;
 }
-
-import { CharacterCategory } from "../lib/characterData";
-
-// Optimized layer component
-const CharacterLayer = ({ category, partId, alt }: { 
-  category: CharacterCategory, 
-  partId: string | undefined, 
-  alt: string 
-}) => {
-  const part = partId ? getPartById(category, partId) : null;
-  if (!part?.imageUrl) return null;
-  
-  return (
-    <div className="absolute inset-0 flex items-center justify-center">
-      <div className="relative w-full h-full">
-        <Image
-          src={part.imageUrl}
-          alt={alt}
-          width={200}
-          height={200}
-          className="w-full h-full object-contain"
-          loading="lazy"
-        />
-      </div>
-    </div>
-  );
-};
 
 export default function CharacterDisplay({ 
   character, 
@@ -191,35 +163,6 @@ export default function CharacterDisplay({
               Created on {new Date(character.createdAt).toLocaleDateString()}
             </p>
           </div>
-
-          {character.personality && character.personality.length > 0 && (
-            <div>
-              <h4 className={`font-semibold text-gray-700 ${textSizes[size]} mb-1`}>
-                Personality Traits
-              </h4>
-              <div className="flex flex-wrap gap-1">
-                {character.personality.map((trait, index) => (
-                  <span
-                    key={index}
-                    className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs"
-                  >
-                    {trait}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {character.backstory && (
-            <div>
-              <h4 className={`font-semibold text-gray-700 ${textSizes[size]} mb-1`}>
-                Backstory
-              </h4>
-              <p className={`text-gray-600 ${textSizes[size]} leading-relaxed`}>
-                {character.backstory}
-              </p>
-            </div>
-          )}
 
           <div>
             <p className={`text-gray-500 ${textSizes[size]}`}>
