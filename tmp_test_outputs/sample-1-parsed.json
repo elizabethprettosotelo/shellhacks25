@@ -1,0 +1,14 @@
+{
+  "name": "Milo",
+  "personality": [
+    "Funny",
+    "Kind"
+  ],
+  "backstory": "A friendly baker.",
+  "body": "body-1",
+  "hair": "hair-1",
+  "bangs": "bangs-2",
+  "eyes": "eyes-3",
+  "mouth": "mouth-5",
+  "clothes": "clothes-2"
+}

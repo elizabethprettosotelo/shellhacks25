@@ -1,0 +1,13 @@
+{
+  "name": "Marker",
+  "personality": [
+    "Witty"
+  ],
+  "backstory": "Wrapped JSON test",
+  "body": "body-2",
+  "hair": "hair-3",
+  "bangs": "bangs-1",
+  "eyes": "eyes-2",
+  "mouth": "mouth-4",
+  "clothes": "clothes-3"
+}

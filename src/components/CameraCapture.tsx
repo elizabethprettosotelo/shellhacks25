@@ -4,8 +4,9 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { generateContentWithImage } from "../lib/gemini";
 import { Button } from "@/components/ui/button";
 import { useCharacterContext } from "@/contexts/CharacterContext";
-import { Character, defaultCharacter, personalityTraits } from "../lib/characterData";
+import { Character, defaultCharacter, personalityTraits, characterParts } from "../lib/characterData";
 import CameraTroubleshooting from "./CameraTroubleshooting";
+import CharacterDisplay from "./CharacterDisplay";
 
 interface CameraCaptureProps {
   mode?: 'analysis' | 'character';
@@ -198,8 +199,8 @@ export default function CameraCapture({ mode = 'analysis', onCharacterCreated }:
     return null;
   }, []);
 
-  // Send image to Gemini for regular analysis
-  const analyzeWithGemini = async (prompt: string = "Describe what you see in this image") => {
+  // Send image to Gemini to generate character JSON
+  const analyzeImageToCharacterJson = async () => {
     if (!capturedImage) {
       alert("Please capture a photo first!");
       return;
@@ -209,14 +210,141 @@ export default function CameraCapture({ mode = 'analysis', onCharacterCreated }:
     try {
       const base64Data = capturedImage.split(',')[1];
       
+      // Build comprehensive asset list for Gemini
+      const buildAssetPrompt = () => {
+        const categories = Object.keys(characterParts) as (keyof typeof characterParts)[];
+        return categories.map(category => {
+          const parts = characterParts[category];
+          const assetList = parts.map(part => `${part.id} (${part.name})`).join(', ');
+          return `${String(category).toUpperCase()}: ${assetList}`;
+        }).join('\n');
+      };
+      
+      const characterPrompt = `Analyze this photo of a person and create a character that matches their physical appearance. You MUST respond with ONLY valid JSON wrapped in markers.
+
+AVAILABLE ASSETS:
+${buildAssetPrompt()}
+
+CRITICAL INSTRUCTIONS:
+1. Respond with ONLY the JSON object wrapped in these exact markers: ===START_JSON=== and ===END_JSON===
+2. No other text outside the markers
+3. Use only the asset IDs listed above
+4. Choose assets that best match the person's appearance
+
+===START_JSON===
+{
+  "name": "character name",
+  "personality": ["trait1", "trait2"],
+  "backstory": "character backstory",
+  "body": "body-X",
+  "hair": "hair-X", 
+  "bangs": "bangs-X or bangs-none",
+  "eyes": "eyes-X",
+  "mouth": "mouth-X",
+  "clothes": "clothes-X",
+  "reasoning": "brief explanation of choices"
+}
+===END_JSON===
+
+Remember: ONLY return the JSON wrapped in the markers above, nothing else.`;
+      
       const response = await generateContentWithImage(
-        prompt,
+        characterPrompt,
         base64Data,
         'image/jpeg',
-        'gemini-1.5-flash'
+        'gemini-2.0-flash-exp'
       );
       
       setGeminiResponse(response);
+      
+      // Parse JSON response with robust extraction
+      let characterData: Partial<Character & { reasoning?: string }>;
+      try {
+        // First try to extract JSON from markers
+        const markerMatch = response.match(/===START_JSON===([\s\S]*?)===END_JSON===/);
+        if (markerMatch) {
+          characterData = JSON.parse(markerMatch[1].trim());
+        } else {
+          // Fallback: Extract JSON from response (in case there's extra text)
+          const jsonMatch = response.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            characterData = JSON.parse(jsonMatch[0]);
+          } else {
+            throw new Error("No valid JSON found in response");
+          }
+        }
+        
+        // Validate required fields
+        const required: (keyof Character)[] = ['body', 'hair', 'eyes', 'mouth', 'clothes'];
+        const missing = required.filter(field => !characterData[field]);
+        if (missing.length > 0) {
+          throw new Error(`Missing required fields: ${missing.join(', ')}`);
+        }
+        
+      } catch (parseError) {
+        console.error("JSON parse error:", parseError);
+        console.log("Raw response:", response);
+        
+        const errorMessage = parseError instanceof Error ? parseError.message : 'Unknown error';
+        
+        // Download error JSON instead
+        const errorData = {
+          error: "Failed to parse Gemini response as JSON",
+          details: errorMessage,
+          rawResponse: response,
+          timestamp: new Date().toISOString()
+        };
+        
+        const errorBlob = new Blob([JSON.stringify(errorData, null, 2)], { type: 'application/json' });
+        const errorUrl = URL.createObjectURL(errorBlob);
+        const errorLink = document.createElement('a');
+        errorLink.href = errorUrl;
+        errorLink.download = `character-error-${Date.now()}.json`;
+        document.body.appendChild(errorLink);
+        errorLink.click();
+        document.body.removeChild(errorLink);
+        URL.revokeObjectURL(errorUrl);
+        
+        setGeminiResponse(`ERROR: ${errorMessage}\n\nRaw response:\n${response}`);
+        return;
+      }
+      
+      // Create full character object
+      const newCharacter: Character = {
+        ...defaultCharacter,
+        ...characterData,
+        id: `char-${Date.now()}`,
+        createdAt: new Date(),
+        createdFrom: 'ai-photo'
+      };
+      
+      // Set character suggestion for preview
+      setCharacterSuggestion(newCharacter);
+      
+      // Download JSON file
+      const jsonOutput = {
+        character: newCharacter,
+        assets: {
+          body: characterParts.body.find(p => p.id === newCharacter.body),
+          hair: characterParts.hair.find(p => p.id === newCharacter.hair),
+          bangs: characterParts.bangs.find(p => p.id === newCharacter.bangs),
+          eyes: characterParts.eyes.find(p => p.id === newCharacter.eyes),
+          mouth: characterParts.mouth.find(p => p.id === newCharacter.mouth),
+          clothes: characterParts.clothes.find(p => p.id === newCharacter.clothes)
+        },
+        timestamp: new Date().toISOString()
+      };
+      
+      const blob = new Blob([JSON.stringify(jsonOutput, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `character-${newCharacter.id}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
     } catch (error) {
       console.error("Error analyzing image:", error);
       setGeminiResponse("Error analyzing image. Please check your API key and try again.");
@@ -236,24 +364,43 @@ export default function CameraCapture({ mode = 'analysis', onCharacterCreated }:
     try {
       const base64Data = capturedImage.split(',')[1];
       
-      const characterPrompt = `Analyze this person's photo and suggest character traits for a fantasy adventure story. 
-      Based on their appearance, suggest:
-      1. 3-5 personality traits from this list: ${personalityTraits.join(', ')}
-      2. A character name that fits their appearance
-      3. A brief backstory (2-3 sentences)
-      4. Their likely role in an adventure (hero, scholar, warrior, etc.)
-      
-      Format your response as:
-      NAME: [suggested name]
-      TRAITS: [trait1, trait2, trait3]
-      BACKSTORY: [backstory]
-      ROLE: [adventure role]`;
+      const characterPrompt = `Analyze this photo of a person and create a character that matches their physical appearance using the available game assets. 
+
+AVAILABLE ASSETS TO CHOOSE FROM:
+Body Types: body-1 (slim), body-2 (average), body-3 (athletic), body-4 (curvy), body-5 (tall), body-6 (short), body-7 (muscular), body-8 (large), body-9 (petite)
+Hair Styles: hair-1 (short straight), hair-2 (long wavy), hair-3 (curly afro), hair-4 (bob cut), hair-5 (ponytail), hair-6 (braids), hair-7 (pixie cut)
+Bangs: bangs-none (no bangs), bangs-1 (straight across), bangs-2 (side swept), bangs-3 (wispy), bangs-4 (thick), bangs-5 (curtain), bangs-6 (asymmetric), bangs-7 (choppy)
+Eyes: eyes-1 (round), eyes-2 (almond), eyes-3 (wide), eyes-4 (narrow), eyes-5 (hooded)
+Mouth: mouth-1 through mouth-14 (various expressions and shapes)
+Clothes: clothes-1 (casual shirt), clothes-2 (dress), clothes-3 (hoodie), clothes-4 (formal), clothes-5 (tank top), clothes-6 (jacket)
+
+INSTRUCTIONS:
+1. Look at their body build and choose the closest matching body type
+2. Analyze their hair length, style, and texture to pick the most similar hair
+3. Check if they have bangs and what style
+4. Look at their eye shape and select the most matching eyes
+5. Observe their mouth/facial expression for the best mouth choice
+6. Consider their clothing style for appropriate clothes
+7. Generate personality traits based on their appearance/vibe
+8. Create a character name and backstory
+
+Respond EXACTLY in this format:
+BODY: [body-X]
+HAIR: [hair-X]
+BANGS: [bangs-X or bangs-none]  
+EYES: [eyes-X]
+MOUTH: [mouth-X]
+CLOTHES: [clothes-X]
+NAME: [character name]
+TRAITS: [comma separated personality traits from: ${personalityTraits.join(', ')}]
+BACKSTORY: [2-3 sentence backstory]
+REASONING: [brief explanation of why you chose these specific assets to match their appearance]`;
       
       const response = await generateContentWithImage(
         characterPrompt,
         base64Data,
         'image/jpeg',
-        'gemini-1.5-flash'
+        'gemini-2.0-flash-exp'
       );
       
       // Parse the response and create character suggestion
@@ -275,6 +422,12 @@ export default function CameraCapture({ mode = 'analysis', onCharacterCreated }:
     let name = 'Adventurer';
     let traits: string[] = [];
     let backstory = '';
+    let body = defaultCharacter.body;
+    let hair = defaultCharacter.hair;
+    let bangs = defaultCharacter.bangs;
+    let eyes = defaultCharacter.eyes;
+    let mouth = defaultCharacter.mouth;
+    let clothes = defaultCharacter.clothes;
     
     lines.forEach(line => {
       if (line.startsWith('NAME:')) {
@@ -284,6 +437,36 @@ export default function CameraCapture({ mode = 'analysis', onCharacterCreated }:
         traits = traitsText.split(',').map(t => t.trim()).filter(t => personalityTraits.includes(t));
       } else if (line.startsWith('BACKSTORY:')) {
         backstory = line.replace('BACKSTORY:', '').trim();
+      } else if (line.startsWith('BODY:')) {
+        const bodyId = line.replace('BODY:', '').trim();
+        if (bodyId && bodyId.startsWith('body-')) {
+          body = bodyId;
+        }
+      } else if (line.startsWith('HAIR:')) {
+        const hairId = line.replace('HAIR:', '').trim();
+        if (hairId && hairId.startsWith('hair-')) {
+          hair = hairId;
+        }
+      } else if (line.startsWith('BANGS:')) {
+        const bangsId = line.replace('BANGS:', '').trim();
+        if (bangsId && (bangsId.startsWith('bangs-') || bangsId === 'bangs-none')) {
+          bangs = bangsId;
+        }
+      } else if (line.startsWith('EYES:')) {
+        const eyesId = line.replace('EYES:', '').trim();
+        if (eyesId && eyesId.startsWith('eyes-')) {
+          eyes = eyesId;
+        }
+      } else if (line.startsWith('MOUTH:')) {
+        const mouthId = line.replace('MOUTH:', '').trim();
+        if (mouthId && mouthId.startsWith('mouth-')) {
+          mouth = mouthId;
+        }
+      } else if (line.startsWith('CLOTHES:')) {
+        const clothesId = line.replace('CLOTHES:', '').trim();
+        if (clothesId && clothesId.startsWith('clothes-')) {
+          clothes = clothesId;
+        }
       }
     });
 
@@ -291,12 +474,13 @@ export default function CameraCapture({ mode = 'analysis', onCharacterCreated }:
       name,
       personality: traits,
       backstory,
-      // Don't override the name from defaultCharacter
-      body: defaultCharacter.body,
-      hair: defaultCharacter.hair,
-      eyes: defaultCharacter.eyes,
-      mouth: defaultCharacter.mouth,
-      clothes: defaultCharacter.clothes,
+      body,
+      hair,
+      bangs,
+      eyes,
+      mouth,
+      clothes,
+      createdFrom: 'ai-photo'
     };
   };
 
@@ -521,8 +705,52 @@ export default function CameraCapture({ mode = 'analysis', onCharacterCreated }:
                   disabled={!capturedImage || loading}
                   className="w-full bg-purple-600 hover:bg-purple-700"
                 >
-                  {loading ? "Creating Character..." : "🎭 Generate Character"}
+                  {loading ? "Analyzing Photo & Creating Character..." : "🎭 Create Character from My Photo"}
                 </Button>
+                
+                {/* API Key Warning */}
+                {!process.env.NEXT_PUBLIC_GEMINI_API_KEY && (
+                  <div className="bg-yellow-50 border border-yellow-200 rounded p-3 text-sm">
+                    <p className="text-yellow-800">
+                      <strong>⚠️ API Key Required:</strong> To use character generation, add your Gemini API key to .env.local
+                    </p>
+                    <p className="text-yellow-700 text-xs mt-1">
+                      Get a free API key at <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer" className="underline">aistudio.google.com</a>
+                    </p>
+                  </div>
+                )}
+                
+                {/* Character Preview */}
+                {characterSuggestion && (
+                  <div className="my-4">
+                    <h3 className="text-sm font-medium text-gray-700 mb-2">Generated Character:</h3>
+                    <div className="bg-gray-50 p-4 rounded-lg border">
+                      <div className="flex gap-4">
+                        {/* Character Visual */}
+                        <div className="flex-shrink-0">
+                          <CharacterDisplay 
+                            character={characterSuggestion as Character} 
+                            size="small"
+                          />
+                        </div>
+                        {/* Character Info */}
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold text-lg">{characterSuggestion.name}</h4>
+                          {characterSuggestion.personality && characterSuggestion.personality.length > 0 && (
+                            <p className="text-sm text-gray-600 mb-2">
+                              <strong>Traits:</strong> {characterSuggestion.personality.join(', ')}
+                            </p>
+                          )}
+                          {characterSuggestion.backstory && (
+                            <p className="text-sm text-gray-700">
+                              <strong>Story:</strong> {characterSuggestion.backstory}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 
                 {characterSuggestion && (
                   <Button 
@@ -545,33 +773,70 @@ export default function CameraCapture({ mode = 'analysis', onCharacterCreated }:
               // Regular analysis mode
               <>
                 <Button 
-                  onClick={() => analyzeWithGemini("Describe what you see in this image in detail")}
+                  onClick={analyzeImageToCharacterJson}
                   disabled={!capturedImage || loading}
-                  className="w-full"
+                  className="w-full bg-blue-600 hover:bg-blue-700"
                 >
-                  {loading ? "Analyzing..." : "Analyze Image"}
+                  {loading ? "Analyzing Photo & Creating Character JSON..." : "📋 Analyze Picture → Character JSON"}
                 </Button>
                 
-                <Button 
-                  onClick={() => analyzeWithGemini("What emotions or mood do you detect in this person's face?")}
-                  disabled={!capturedImage || loading}
-                  variant="outline"
-                  className="w-full"
-                >
-                  Analyze Emotions
-                </Button>
-                
-                <Button 
-                  onClick={() => analyzeWithGemini("Describe the setting, lighting, and composition of this photo")}
-                  disabled={!capturedImage || loading}
-                  variant="outline"
-                  className="w-full"
-                >
-                  Analyze Composition
-                </Button>
+                {/* API Key Warning */}
+                {!process.env.NEXT_PUBLIC_GEMINI_API_KEY && (
+                  <div className="bg-yellow-50 border border-yellow-200 rounded p-3 text-sm">
+                    <p className="text-yellow-800">
+                      <strong>⚠️ API Key Required:</strong> To use character generation, add your Gemini API key to .env.local
+                    </p>
+                    <p className="text-yellow-700 text-xs mt-1">
+                      Get a free API key at <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer" className="underline">aistudio.google.com</a>
+                    </p>
+                  </div>
+                )}
               </>
             )}
           </div>
+
+          {/* Character Preview for Analysis Mode */}
+          {mode === 'analysis' && characterSuggestion && (
+            <div className="mt-4">
+              <h3 className="text-sm font-medium text-gray-700 mb-2">Generated Character Preview:</h3>
+              <div className="bg-gray-50 p-4 rounded-lg border">
+                <div className="flex gap-4">
+                  {/* Character Visual */}
+                  <div className="flex-shrink-0">
+                    <CharacterDisplay 
+                      character={characterSuggestion as Character} 
+                      size="small"
+                    />
+                  </div>
+                  {/* Character Info */}
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-semibold text-lg">{characterSuggestion.name}</h4>
+                    {characterSuggestion.personality && characterSuggestion.personality.length > 0 && (
+                      <p className="text-sm text-gray-600 mb-2">
+                        <strong>Traits:</strong> {characterSuggestion.personality.join(', ')}
+                      </p>
+                    )}
+                    {characterSuggestion.backstory && (
+                      <p className="text-sm text-gray-700 mb-2">
+                        <strong>Story:</strong> {characterSuggestion.backstory}
+                      </p>
+                    )}
+                    <div className="text-xs text-gray-500">
+                      <p><strong>Assets:</strong> {characterSuggestion.body}, {characterSuggestion.hair}, {characterSuggestion.bangs}, {characterSuggestion.eyes}, {characterSuggestion.mouth}, {characterSuggestion.clothes}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <Button 
+                    onClick={createCharacterFromSuggestion}
+                    className="w-full bg-green-600 hover:bg-green-700"
+                  >
+                    ✨ Save This Character
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Gemini response */}
           {geminiResponse && (

@@ -1,0 +1,55 @@
+{
+  "character": {
+    "id": "char-1735335420000",
+    "name": "Alex Adventure",
+    "body": "body-3",
+    "hair": "hair-2",
+    "bangs": "bangs-none",
+    "eyes": "eyes-1",
+    "mouth": "mouth-2",
+    "clothes": "clothes-1",
+    "personality": ["Brave", "Curious", "Adventurous"],
+    "backstory": "Alex is a young explorer who loves discovering new places and meeting interesting people. They have an optimistic outlook and never back down from a challenge.",
+    "createdAt": "2025-09-27T19:30:20.000Z",
+    "createdFrom": "ai-photo"
+  },
+  "assets": {
+    "body": {
+      "id": "body-3",
+      "name": "Body 3",
+      "imageUrl": "/charassets/body/Body 3.PNG",
+      "category": "body"
+    },
+    "hair": {
+      "id": "hair-2", 
+      "name": "Hair 2",
+      "imageUrl": "/charassets/hair/Hair 2.PNG",
+      "category": "hair"
+    },
+    "bangs": {
+      "id": "bangs-none",
+      "name": "No Bangs",
+      "imageUrl": "",
+      "category": "bangs"
+    },
+    "eyes": {
+      "id": "eyes-1",
+      "name": "Eyes 1", 
+      "imageUrl": "/charassets/eyes/Eyes 1.PNG",
+      "category": "eyes"
+    },
+    "mouth": {
+      "id": "mouth-2",
+      "name": "Mouth 2",
+      "imageUrl": "/charassets/mouth/Mouth 2.PNG",
+      "category": "mouth"
+    },
+    "clothes": {
+      "id": "clothes-1",
+      "name": "Clothes 1",
+      "imageUrl": "/charassets/clothes/Clothes 1.PNG", 
+      "category": "clothes"
+    }
+  },
+  "timestamp": "2025-09-27T19:30:20.000Z"
+}
