@@ -9,6 +9,7 @@ import {
   characterParts,
   getPartById,
 } from "@/lib/characterData";
+import { generateScenesSequential } from '@/lib/generation';
 
 interface CharacterCreatorProps {
   onCharacterComplete?: (character: Character) => void;
@@ -38,6 +39,16 @@ export default function CharacterCreator({ onCharacterComplete, initialCharacter
       createdFrom: 'manual',
     };
     onCharacterComplete?.(finalCharacter);
+    // Kick off background generation for priority scenes (1a, 1b)
+    try {
+      if (typeof window !== 'undefined' && navigator.onLine) {
+        generateScenesSequential(['1a','1b'], finalCharacter, (r) => {
+          console.log('Generated:', r.sceneId, r.note || 'ok');
+        });
+      }
+    } catch (err) {
+      console.error('Background generation failed to start', err);
+    }
   };
 
   // Character preview component

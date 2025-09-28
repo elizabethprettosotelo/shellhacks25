@@ -1,120 +1,409 @@
 {
-  "meta": { "version": 1, "title": "Adventure: Jake From StateFarm vs The Aliens" },
-  "start": "home_intrusion",
+  "meta": { "version": 1, "title": "Adventure: Scaffolded Story" },
+  "start": "1a",
   "scenes": [
     {
-      "id": "home_intrusion",
-      "setting": "suburban_living_room",
-      "text": "You’re alone at your parents’ house. Homework’s done; research paper can wait. A warmonger alien kicks in the door and declares your home his base of operations. What do you do?",
+      "id": "1a",
+      "setting": "room",
+      "text": "Scene 1a: Filler intro text. This is a placeholder description that you'll replace later.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/1a/600",
+      "caption": "Placeholder caption for 1a",
       "choices": [
-        { "id": "fight_alien", "label": "Fight the alien", "target": "hospital_smash_cut" },
-        { "id": "call_police_escape", "label": "Call police and escape", "target": "hurricane_drive" }
-      ]
-    },
-
-    {
-      "id": "hospital_smash_cut",
-      "setting": "bug_hospital",
-      "text": "Smash cut: the hospital. Nearly every bone feels broken. A hooded man wheels your bed and murmurs, “This one is protected by StateFarm.” Staff recoil.",
-      "choices": [
-        { "id": "trust_hood", "label": "Trust the hooded man", "target": "imposters_besiege", "effects": { "set": { "trust_jake": true } } },
-        { "id": "stay_put", "label": "Stay in the room", "target": "wasp_billing" }
-      ]
-    },
-
-    {
-      "id": "imposters_besiege",
-      "setting": "city_streets",
-      "text": "Hundreds of you flood the streets—imposters trying to replace you. The hooded man asks you to trust his protection.",
-      "choices": [
-        { "id": "trust_jake_reveal", "label": "Trust him", "target": "jake_revealed", "requires": { "trust_jake": true } },
-        { "id": "run_from_imposters", "label": "Run for it", "target": "alley_ambush" }
+        { "id": "to_1b", "label": "Continue to 1b", "target": "1b" }
       ]
     },
     {
-      "id": "jake_revealed",
-      "setting": "city_streets",
-      "text": "He throws back the hood—JAKE FROM STATEFARM. With a single gust, he scatters the entire imposter horde. You’re safe—for now.",
-      "terminal": true
-    },
-    {
-      "id": "alley_ambush",
-      "setting": "city_alley",
-      "text": "You bolt into an alley. Five imposters corner you. It doesn’t end well.",
-      "terminal": true
-    },
-
-    {
-      "id": "wasp_billing",
-      "setting": "bug_hospital",
-      "text": "A giant, very professional wasp wheels in and itemizes your bill—payable in money or blood. The hooded man offers help.",
+      "id": "1b",
+      "setting": "room",
+      "text": "Scene 1b: More filler text. Use this space to describe the scene briefly.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/1b/600",
+      "caption": "Placeholder caption for 1b",
       "choices": [
-        { "id": "blood_payment", "label": "Pay in blood yourself", "target": "blood_husk" },
-        { "id": "let_hood_help", "label": "Accept his help", "target": "jake_tosses_wasp" }
+        { "id": "to_1c", "label": "Continue to 1c", "target": "1c" }
       ]
     },
     {
-      "id": "blood_husk",
-      "setting": "bug_hospital",
-      "text": "You offer an arm. Three seconds later you’re a crisp, decorative husk.",
-      "terminal": true
-    },
-    {
-      "id": "jake_tosses_wasp",
-      "setting": "bug_hospital",
-      "text": "The hood flies off again—JAKE FROM STATEFARM. He grabs the wasp and politely ejects her through a door. You and Jake fight the remaining bugs side-by-side.",
-      "terminal": true
-    },
-
-    {
-      "id": "hurricane_drive",
-      "setting": "suburban_street",
-      "text": "Your call sparks a CAT-5 brawl that levels the block. You speed away, unsure who to call. An alien sniper blows a tire.",
+      "id": "1c",
+      "setting": "room",
+      "text": "Scene 1c: Transitional filler. Add details later.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/1c/600",
+      "caption": "Placeholder caption for 1c",
+      "imageNeedsGemini": false,
       "choices": [
-        { "id": "call_wrong_jake", "label": "Call a random number", "target": "wrong_jake_hell" },
-        { "id": "call_emergency", "label": "Call the emergency number Mom gave you", "target": "correct_jake_lands" }
+        { "id": "to_1d", "label": "Continue to 1d", "target": "1d" }
       ]
     },
     {
-      "id": "wrong_jake_hell",
-      "setting": "ravine_edge",
-      "text": "Jake Gyllenhaal picks up. The car sails off a cliff… straight into the underworld.",
+      "id": "1d",
+      "setting": "room",
+      "text": "Scene 1d: Decision point. Choose to branch into the 2-series or the 4-series.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/1d/600",
+      "caption": "Placeholder caption for 1d",
       "choices": [
-        { "id": "accept_rescue", "label": "Accept Jake’s rescue", "target": "ascend_with_jake", "effects": { "set": { "trust_jake": true } } },
-        { "id": "reject_rescue", "label": "Reject him, embrace the underworld", "target": "choose_hell" }
+        { "id": "to_2a", "label": "Go to 2a (explore path 2)", "target": "2a" },
+        { "id": "to_4a", "label": "Go to 4a (explore path 4)", "target": "4a" }
       ]
     },
     {
-      "id": "ascend_with_jake",
-      "setting": "hell_gate",
-      "text": "Because Mom signed you up for life insurance, JAKE FROM STATEFARM appears, spreads wings, and lifts you back to life.",
-      "terminal": true
+      "id": "2a",
+      "setting": "path2",
+      "text": "Scene 2a: Filler for the 2-series.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/2a/600",
+      "caption": "Placeholder caption for 2a",
+      "choices": [ { "id": "to_2b", "label": "Continue", "target": "2b" } ]
     },
     {
-      "id": "choose_hell",
-      "setting": "hell_gate",
-      "text": "You refuse the offered hand. The demons appreciate your commitment.",
-      "terminal": true
+      "id": "2b",
+      "setting": "path2",
+      "text": "Scene 2b: Filler for the 2-series.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/2b/600",
+      "caption": "Placeholder caption for 2b",
+      "choices": [ { "id": "to_2c", "label": "Continue", "target": "2c" } ]
     },
     {
-      "id": "correct_jake_lands",
-      "setting": "cliff_road",
-      "text": "The right Jake falls from the sky and stops your car with one hand. He asks you to stay behind him while he deals with the aliens.",
+      "id": "2c",
+      "setting": "path2",
+      "text": "Scene 2c: Filler for the 2-series.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/2c/600",
+      "caption": "Placeholder caption for 2c",
+      "imageNeedsGemini": false,
+      "choices": [ { "id": "to_2d", "label": "Continue", "target": "2d" } ]
+    },
+    {
+      "id": "2d",
+      "setting": "path2",
+      "text": "Scene 2d: Filler for the 2-series.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/2d/600",
+      "caption": "Placeholder caption for 2d",
+      "imageNeedsGemini": false,
+      "choices": [ { "id": "to_2e", "label": "Continue", "target": "2e" } ]
+    },
+    {
+      "id": "2e",
+      "setting": "path2",
+      "text": "Scene 2e: Filler for the 2-series.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/2e/600",
+      "caption": "Placeholder caption for 2e",
+      "choices": [ { "id": "to_2f", "label": "Continue", "target": "2f" } ]
+    },
+    {
+      "id": "2f",
+      "setting": "path2",
+      "text": "Scene 2f: Filler for the 2-series.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/2f/600",
+      "caption": "Placeholder caption for 2f",
+      "imageNeedsGemini": false,
+      "choices": [ { "id": "to_2g", "label": "Continue", "target": "2g" } ]
+    },
+    {
+      "id": "2g",
+      "setting": "path2",
+      "text": "Scene 2g: Filler for the 2-series.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/2g/600",
+      "caption": "Placeholder caption for 2g",
+      "choices": [ { "id": "to_2h", "label": "Continue", "target": "2h" } ]
+    },
+    {
+      "id": "2h",
+      "setting": "path2",
+      "text": "Scene 2h: Branching point. Choose which 3a scene to visit.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/2h/600",
+      "caption": "Placeholder caption for 2h",
+      "imageNeedsGemini": false,
       "choices": [
-        { "id": "drive_anyway", "label": "Try to drive away", "target": "beam_up_probe" },
-        { "id": "stay_put_trust", "label": "Stay put and trust Jake", "target": "one_punch_mothership", "effects": { "set": { "trust_jake": true } } }
+        { "id": "to_3a1", "label": "Go to 3a1", "target": "3a1" },
+        { "id": "to_3a2", "label": "Go to 3a2", "target": "3a2" }
       ]
     },
     {
-      "id": "beam_up_probe",
-      "setting": "mothership",
-      "text": "A tractor beam lifts the car. You learn new meanings of “out-of-network.”",
+      "id": "3a1",
+      "setting": "path3",
+      "text": "Scene 3a1: Short filler. This will route into 3b.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/3a1/600",
+      "caption": "Placeholder caption for 3a1",
+      "choices": [ { "id": "to_3b_from_3a1", "label": "Continue to 3b", "target": "3b" } ]
+    },
+    {
+      "id": "3a2",
+      "setting": "path3",
+      "text": "Scene 3a2: Short filler. This will route into 3b.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/3a2/600",
+      "caption": "Placeholder caption for 3a2",
+      "choices": [ { "id": "to_3b_from_3a2", "label": "Continue to 3b", "target": "3b" } ]
+    },
+    {
+      "id": "3b",
+      "setting": "path3",
+      "text": "Scene 3b: Start of the 3-series mainline.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/3b/600",
+      "caption": "Placeholder caption for 3b",
+      "imageNeedsGemini": false,
+      "choices": [ { "id": "to_3c", "label": "Continue", "target": "3c" } ]
+    },
+    {
+      "id": "3c",
+      "setting": "path3",
+      "text": "Scene 3c: Filler text.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/3c/600",
+      "caption": "Placeholder caption for 3c",
+      "imageNeedsGemini": false,
+      "choices": [ { "id": "to_3d", "label": "Continue", "target": "3d" } ]
+    },
+    {
+      "id": "3d",
+      "setting": "path3",
+      "text": "Scene 3d: Filler text.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/3d/600",
+      "caption": "Placeholder caption for 3d",
+      "imageNeedsGemini": false,
+      "choices": [ { "id": "to_3e", "label": "Continue", "target": "3e" } ]
+    },
+    {
+      "id": "3e",
+      "setting": "path3",
+      "text": "Scene 3e: Filler text.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/3e/600",
+      "caption": "Placeholder caption for 3e",
+      "imageNeedsGemini": false,
+      "choices": [ { "id": "to_3f", "label": "Continue", "target": "3f" } ]
+    },
+    {
+      "id": "3f",
+      "setting": "path3",
+      "text": "Scene 3f: Filler text.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/3f/600",
+      "caption": "Placeholder caption for 3f",
+      "imageNeedsGemini": false,
+      "choices": [ { "id": "to_3g", "label": "Continue", "target": "3g" } ]
+    },
+    {
+      "id": "3g",
+      "setting": "path3",
+      "text": "Scene 3g: Filler text.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/3g/600",
+      "caption": "Placeholder caption for 3g",
+      "imageNeedsGemini": false,
+      "choices": [ { "id": "to_3h", "label": "Continue", "target": "3h" } ]
+    },
+    {
+      "id": "3h",
+      "setting": "path3",
+      "text": "Scene 3h: Filler text.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/3h/600",
+      "caption": "Placeholder caption for 3h",
+      "imageNeedsGemini": false,
+      "choices": [ { "id": "to_3i", "label": "Continue", "target": "3i" } ]
+    },
+    {
+      "id": "3i",
+      "setting": "path3",
+      "text": "Scene 3i: Filler text.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/3i/600",
+      "caption": "Placeholder caption for 3i",
+      "choices": [ { "id": "to_3j", "label": "Continue", "target": "3j" } ]
+    },
+    {
+      "id": "3j",
+      "setting": "path3",
+      "text": "Scene 3j: End of the 3-series. Replace with your content later.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/3j/600",
+      "caption": "Placeholder caption for 3j",
       "terminal": true
     },
     {
-      "id": "one_punch_mothership",
-      "setting": "skyline",
-      "text": "With a single punch, Jake deletes the city-wide mothership. The invasion ends. Your home reappears good as new.",
+      "id": "4a",
+      "setting": "path4",
+      "text": "Scene 4a: Start of the 4-series.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/4a/600",
+      "caption": "Placeholder caption for 4a",
+      "choices": [ { "id": "to_4b", "label": "Continue", "target": "4b" } ]
+    },
+    {
+      "id": "4b",
+      "setting": "path4",
+      "text": "Scene 4b: Filler for the 4-series.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/4b/600",
+      "caption": "Placeholder caption for 4b",
+      "imageNeedsGemini": false,
+      "choices": [ { "id": "to_4c", "label": "Continue", "target": "4c" } ]
+    },
+    {
+      "id": "4c",
+      "setting": "path4",
+      "text": "Scene 4c: Filler for the 4-series.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/4c/600",
+      "caption": "Placeholder caption for 4c",
+      "imageNeedsGemini": false,
+      "choices": [ { "id": "to_4d", "label": "Continue", "target": "4d" } ]
+    },
+    {
+      "id": "4d",
+      "setting": "path4",
+      "text": "Scene 4d: Final of the 4-series; this leads into the 5-series.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/4d/600",
+      "caption": "Placeholder caption for 4d",
+      "choices": [
+        { "id": "to_4e_a", "label": "Take the left path", "target": "4e" },
+        { "id": "to_4e_b", "label": "Take the right path", "target": "4e" }
+      ]
+    },
+    {
+      "id": "4e",
+      "setting": "path4",
+      "text": "Scene 4e: The illusion of choice resolves here; both options brought you to the same place.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/4e/600",
+      "caption": "Placeholder caption for 4e",
+      "choices": [ { "id": "to_5a", "label": "Continue to 5a", "target": "5a" } ]
+    },
+    {
+      "id": "5a",
+      "setting": "path5",
+      "text": "Scene 5a: Beginning of the 5-series.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/5a/600",
+      "caption": "Placeholder caption for 5a",
+      "choices": [ { "id": "to_5b", "label": "Continue", "target": "5b" } ]
+    },
+    {
+      "id": "5b",
+      "setting": "path5",
+      "text": "Scene 5b: Filler text.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/5b/600",
+      "caption": "Placeholder caption for 5b",
+      "imageNeedsGemini": false,
+      "choices": [ { "id": "to_5c", "label": "Continue", "target": "5c" } ]
+    },
+    {
+      "id": "5c",
+      "setting": "path5",
+      "text": "Scene 5c: Filler text.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/5c/600",
+      "caption": "Placeholder caption for 5c",
+      "choices": [ { "id": "to_5d", "label": "Continue", "target": "5d" } ]
+    },
+    {
+      "id": "5d",
+      "setting": "path5",
+      "text": "Scene 5d: Filler text.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/5d/600",
+      "caption": "Placeholder caption for 5d",
+      "choices": [ { "id": "to_5e", "label": "Continue", "target": "5e" } ]
+    },
+    {
+      "id": "5e",
+      "setting": "path5",
+      "text": "Scene 5e: Filler text.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/5e/600",
+      "caption": "Placeholder caption for 5e",
+      "imageNeedsGemini": false,
+      "choices": [ { "id": "to_5f", "label": "Continue", "target": "5f" } ]
+    },
+    {
+      "id": "5f",
+      "setting": "path5",
+      "text": "Scene 5f: Filler text.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/5f/600",
+      "caption": "Placeholder caption for 5f",
+      "imageNeedsGemini": false,
+      "choices": [ { "id": "to_5g", "label": "Continue", "target": "5g" } ]
+    },
+    {
+      "id": "5g",
+      "setting": "path5",
+      "text": "Scene 5g: Filler text.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/5g/600",
+      "caption": "Placeholder caption for 5g",
+      "choices": [ { "id": "to_5h", "label": "Continue", "target": "5h" } ]
+    },
+    {
+      "id": "5h",
+      "setting": "path5",
+      "text": "Scene 5h: Filler text.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/5h/600",
+      "caption": "Placeholder caption for 5h",
+      "choices": [ { "id": "to_5i", "label": "Continue", "target": "5i" } ]
+    },
+    {
+      "id": "5i",
+      "setting": "path5",
+      "text": "Scene 5i: Filler text.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/5i/600",
+      "caption": "Placeholder caption for 5i",
+      "choices": [ { "id": "to_5j", "label": "Continue", "target": "5j" } ]
+    },
+    {
+      "id": "5j",
+      "setting": "path5",
+      "text": "Scene 5j: Filler text.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/5j/600",
+      "caption": "Placeholder caption for 5j",
+      "imageNeedsGemini": false,
+      "choices": [ { "id": "to_5k", "label": "Continue", "target": "5k" } ]
+    },
+    {
+      "id": "5k",
+      "setting": "path5",
+      "text": "Scene 5k: Filler text.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/5k/600",
+      "caption": "Placeholder caption for 5k",
+      "imageNeedsGemini": false,
+      "choices": [ { "id": "to_5l", "label": "Continue", "target": "5l" } ]
+    },
+    {
+      "id": "5l",
+      "setting": "path5",
+      "text": "Scene 5l: Filler text.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/5l/600",
+      "caption": "Placeholder caption for 5l",
+      "imageNeedsGemini": false,
+      "choices": [ { "id": "to_5m", "label": "Continue", "target": "5m" } ]
+    },
+    {
+      "id": "5m",
+      "setting": "path5",
+      "text": "Scene 5m: Final scene of the 5-series. Replace with your final content.",
+      "imageLeft": "/charassets/placeholder-left.png",
+      "imageRight": "https://picsum.photos/seed/5m/600",
+      "caption": "Placeholder caption for 5m",
       "terminal": true
     }
   ]

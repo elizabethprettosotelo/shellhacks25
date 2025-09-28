@@ -27,14 +27,21 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       const savedCharacters = localStorage.getItem(STORAGE_KEY);
       const savedCurrentCharacter = localStorage.getItem(CURRENT_CHARACTER_KEY);
       
+      let parsedCharacters: any[] = [];
       if (savedCharacters) {
-        const parsedCharacters = JSON.parse(savedCharacters);
+        parsedCharacters = JSON.parse(savedCharacters) || [];
         setCharacters(parsedCharacters);
       }
-      
+
       if (savedCurrentCharacter) {
         const parsedCurrentCharacter = JSON.parse(savedCurrentCharacter);
-        setCurrentCharacter(parsedCurrentCharacter);
+        // Only restore currentCharacter if it exists in the saved characters list
+        if (parsedCharacters && parsedCharacters.find && parsedCharacters.find((c: any) => c.id === parsedCurrentCharacter.id)) {
+          setCurrentCharacter(parsedCurrentCharacter);
+        } else {
+          // Don't restore stale currentCharacter if it's not part of saved characters
+          setCurrentCharacter(null);
+        }
       }
     } catch (error) {
       console.error('Error loading characters from localStorage:', error);

@@ -5,31 +5,35 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function CharacterCustomizer() {
+  // Types
+  type Category = 'Hair' | 'Eyes' | 'Skin';
+  type CharKey = 'hair' | 'eyes' | 'skin';
+
   // Track the chosen features
-  const [character, setCharacter] = useState({
+  const [character, setCharacter] = useState<Record<CharKey, string | null>>({
     hair: null,
     eyes: null,
     skin: null,
   });
 
   // Tabs: categories
-  const categories = ["Hair", "Eyes", "Skin"];
+  const categories: Category[] = ['Hair', 'Eyes', 'Skin'];
 
   // Options per category
-  const options = {
-    Hair: ["/hair1.png", "/hair2.png", "/hair3.png", "/hair4.png", "/hair5.png", "/hair6.png", "/hair7.png"],
-    Eyes: ["/eyes1.png", "/eyes2.png", "/eyes3.png", "/eyes4.png", "/eyes5.png"],
-    Skin: ["/skin1.png", "/skin2.png", "/skin3.png"],
+  const options: Record<Category, string[]> = {
+    Hair: ['/hair1.png', '/hair2.png', '/hair3.png', '/hair4.png', '/hair5.png', '/hair6.png', '/hair7.png'],
+    Eyes: ['/eyes1.png', '/eyes2.png', '/eyes3.png', '/eyes4.png', '/eyes5.png'],
+    Skin: ['/skin1.png', '/skin2.png', '/skin3.png'],
   };
 
   // Pagination for option grid
   const [page, setPage] = useState(0);
   const itemsPerPage = 6;
 
-  const [activeCategory, setActiveCategory] = useState("Hair");
+  const [activeCategory, setActiveCategory] = useState<Category>('Hair');
 
-  const handleSelect = (cat, option) => {
-    setCharacter((prev) => ({ ...prev, [cat.toLowerCase()]: option }));
+  const handleSelect = (cat: Category, option: string) => {
+    setCharacter((prev) => ({ ...prev, [cat.toLowerCase() as CharKey]: option }));
   };
 
   const visibleOptions = options[activeCategory].slice(
@@ -55,7 +59,7 @@ export default function CharacterCustomizer() {
       {/* Right Panel: Options */}
       <div className="flex flex-col bg-white rounded-xl shadow-md p-4">
         {/* Tabs for categories */}
-        <Tabs defaultValue="Hair" onValueChange={(val) => { setActiveCategory(val); setPage(0); }}>
+  <Tabs defaultValue="Hair" onValueChange={(val) => { setActiveCategory(val as Category); setPage(0); }}>
           <TabsList className="grid grid-cols-3 mb-4">
             {categories.map((cat) => (
               <TabsTrigger key={cat} value={cat}>{cat}</TabsTrigger>
@@ -66,11 +70,11 @@ export default function CharacterCustomizer() {
             <TabsContent key={cat} value={cat}>
               {/* Options Grid */}
               <div className="grid grid-cols-3 gap-2 mb-4">
-                {visibleOptions.map((opt, i) => (
+                {visibleOptions.map((opt: string, i: number) => (
                   <button
                     key={i}
                     className={`h-20 w-20 border rounded-md flex items-center justify-center hover:border-blue-500 ${
-                      character[cat.toLowerCase()] === opt ? "border-blue-500" : "border-gray-300"
+                      (character[cat.toLowerCase() as CharKey] === opt) ? 'border-blue-500' : 'border-gray-300'
                     }`}
                     onClick={() => handleSelect(cat, opt)}
                   >

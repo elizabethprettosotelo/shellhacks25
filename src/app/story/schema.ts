@@ -15,6 +15,11 @@ export type Scene = {
   setting?: string;         // optional setting tag
   terminal?: boolean;       // true = end of path
   choices?: Choice[];       // 0 or more choices
+  // Optional per-scene media
+  imageLeft?: string;       // URL or path to left square image
+  imageRight?: string;      // URL or path to right square image
+  caption?: string;         // caption for right image
+  imageNeedsGemini?: boolean; // optional flag; false = no Gemini generation needed
 };
 
 export type Story = {

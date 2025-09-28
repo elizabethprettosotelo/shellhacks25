@@ -9,8 +9,8 @@ if (typeof window !== 'undefined') {
 }
 
 export const metadata: Metadata = {
-  title: "Character Creator App",
-  description: "AI-powered character creation and customization app",
+  title: "The Young Adult's Unrealistic Guide to Insurance",
+  description: "A choose-your-own adventure ",
 };
 
 export default function RootLayout({
